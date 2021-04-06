@@ -16,7 +16,7 @@ def define_user_class(db):
 def define_favorite_class(db):
     '''Returns class definition of Favorite model using database instance.'''
     class Favorite(db.Model):
-        email = db.Column(db.String(80), db.ForeignKey('User.email'), primary_key=True)
+        email = db.Column(db.String, db.ForeignKey('User.email'), primary_key=True)
         media = db.Column(db.String(80), primary_key=True)
         
         def __repr__(self):
