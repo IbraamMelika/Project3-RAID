@@ -1,1 +1,6 @@
-Flask
+flask
+flask_socketio
+flask_cors
+flask_sqlalchemy
+python-dotenv
+psycopg2-binary 
