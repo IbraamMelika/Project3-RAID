@@ -17,11 +17,13 @@ APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 DB = SQLAlchemy(APP)
 
+# Setup models that will be used to query the database
 Person = models.define_person_class(DB)
 Favorite = models.define_favorite_class(DB)
 Chat = models.define_chat_class(DB)
 DB.create_all()
 
+# To test, try inserting a new record and then querying it.
 try:
     new_person = Person(email='example@network.com', username='myusername')
     DB.session.add(new_person)
