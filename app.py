@@ -22,6 +22,25 @@ Favorite = models.define_favorite_class(DB)
 Chat = models.define_chat_class(DB)
 DB.create_all()
 
+try:
+    new_person = Person(email='example@network.com', username='myusername')
+    DB.session.add(new_person)
+    DB.session.commit()
+except:
+    DB.session.rollback()
+
+query = Person.query.filter_by(username='myusername').first()
+print(query)
+quit()
+
+CORS_VAR = CORS(APP, resources={r"/*": {"origins": "*"}})
+
+SOCKETIO = SocketIO(
+    APP,
+    cors_allowed_origins="*",
+    json=json,
+    manage_session=False,
+)
 
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
