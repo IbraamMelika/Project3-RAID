@@ -32,9 +32,9 @@ def define_favorite_class(db):
             
     return Favorite
             
-def define_chat_class(db):
+def define_comment_class(db):
     '''Returns class definition of Chat model using database instance.'''
-    class Chat(db.Model):
+    class Comment(db.Model):
         '''Class for Chat data model'''
         email = db.Column(db.String, db.ForeignKey('person.email'), primary_key=True)
         message = db.Column(db.String, nullable=False)
@@ -42,6 +42,6 @@ def define_chat_class(db):
         timestamp = db.Column(db.DateTime(timezone=True), default=func.now())
         
         def __repr__(self):
-            return '<Chat Instance: email {} media {} timestamp {}>'.format(self.email, self.media, self.timestamp)
+            return '<Comment Instance: email {} media {} timestamp {}>'.format(self.email, self.media, self.timestamp)
         
-    return Chat
+    return Comment

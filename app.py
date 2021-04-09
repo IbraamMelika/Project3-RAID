@@ -20,7 +20,7 @@ DB = SQLAlchemy(APP)
 # Setup models that will be used to query the database
 Person = models.define_person_class(DB)
 Favorite = models.define_favorite_class(DB)
-Chat = models.define_chat_class(DB)
+Comment = models.define_comment_class(DB)
 DB.create_all()
 
 CORS_VAR = CORS(APP, resources={r"/*": {"origins": "*"}})
@@ -36,8 +36,12 @@ SOCKETIO = SocketIO(
 @APP.route('/<path:filename>')
 def index(filename):
     return send_from_directory('./build', filename)
+    
+@APP.route('/api/v1/test', methods=['GET'])
+def test_route():
+    return {'success': True, "statusText": "Got Response"}  
 
 APP.run(
     host=os.getenv('IP', '0.0.0.0'),
-    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8080)),
 )
