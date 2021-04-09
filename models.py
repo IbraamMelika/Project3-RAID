@@ -37,9 +37,9 @@ def define_chat_class(db):
     class Chat(db.Model):
         '''Class for Chat data model'''
         email = db.Column(db.String, db.ForeignKey('person.email'), primary_key=True)
-        message = db.Column(db.String)
-        media = db.Column(db.String(10000))
-        timestamp = db.Column(db.DateTime(timezone=True), server_default=func.now())
+        message = db.Column(db.String, nullable=False)
+        media = db.Column(db.String(80), nullable=False)
+        timestamp = db.Column(db.DateTime(timezone=True), default=func.now())
         
         def __repr__(self):
             return '<Chat Instance: email {} media {} timestamp {}>'.format(self.email, self.media, self.timestamp)
