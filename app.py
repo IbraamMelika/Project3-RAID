@@ -1,16 +1,47 @@
 import os
-from flask import Flask, send_from_directory
+from dotenv import load_dotenv, find_dotenv
+from flask import Flask, send_from_directory, json
+from flask_socketio import SocketIO
+from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+import models
 
-app = Flask(__name__, static_folder='./build/static')
+APP = Flask(__name__, static_folder='./build/static')
 
+load_dotenv(find_dotenv())
 
-@app.route('/', defaults={"filename": "index.html"})
-@app.route('/<path:filename>')
+# Point SQLAlchemy to your Heroku database
+APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# Gets rid of a warning
+APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+DB = SQLAlchemy(APP)
+
+# Setup models that will be used to query the database
+Person = models.define_person_class(DB)
+Favorite = models.define_favorite_class(DB)
+Comment = models.define_comment_class(DB)
+DB.create_all()
+
+CORS_VAR = CORS(APP, resources={r"/*": {"origins": "*"}})
+
+SOCKETIO = SocketIO(
+    APP,
+    cors_allowed_origins="*",
+    json=json,
+    manage_session=False,
+)
+
+@APP.route('/', defaults={"filename": "index.html"})
+@APP.route('/<path:filename>')
 def index(filename):
     return send_from_directory('./build', filename)
+    
+@APP.route('/api/v1/test', methods=['GET'])
+def test_route():
+    return {'success': True, "statusText": "Got Response"}  
 
-
-app.run(
+APP.run(
     host=os.getenv('IP', '0.0.0.0'),
-    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+    port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8080)),
 )
