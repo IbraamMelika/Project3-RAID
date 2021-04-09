@@ -12,8 +12,8 @@ def define_person_class(db):
     class Person(db.Model):
         '''Class for Person data model'''
         email = db.Column(db.String(80), primary_key=True)
-        username = db.Column(db.String(80))
-        joinDate = db.Column(db.DateTime(timezone=True), server_default=func.now())
+        username = db.Column(db.String(80), default="DefaultUsername")
+        joinDate = db.Column(db.DateTime(timezone=True), default=func.now())
 
         def __repr__(self):
             return '<Email: {} username: {} joinDate: {}>'.format(self.email, self.username, self.joinDate)
