@@ -8,3 +8,7 @@ export DATABASE_URL='url goes here'
 Alternatively, put the line
 DATABASE_URL='url goes here'
 in a .env file in the same folder as app.py
+
+### Python Linting
+
+The warning "invalid-envvar-default" has been disabled.
