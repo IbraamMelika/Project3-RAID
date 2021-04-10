@@ -1,3 +1,5 @@
+'''Module to run server side of app.'''
+
 import os
 from dotenv import load_dotenv, find_dotenv
 from flask import Flask, send_from_directory, json
@@ -35,11 +37,13 @@ SOCKETIO = SocketIO(
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
 def index(filename):
+    '''Returns index.'''
     return send_from_directory('./build', filename)
-    
+
 @APP.route('/api/v1/test', methods=['GET'])
 def test_route():
-    return {'success': True, "statusText": "Got Response"}  
+    '''Returns success response'''
+    return {'success': True, "statusText": "Got Response"}
 
 APP.run(
     host=os.getenv('IP', '0.0.0.0'),
