@@ -12,3 +12,4 @@ in a .env file in the same folder as app.py
 ### Python Linting
 
 The warning "invalid-envvar-default" has been disabled.
+The warning too-few-public-methods has been disabled.
