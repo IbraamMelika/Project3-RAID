@@ -3,20 +3,28 @@ import './App.css';
 import requests from './requests';
 import RowRetry from './RowRetry';
 import Banner from './Banner';
+import { useState } from 'react';
+const API_KEY =`${process.env.REACT_APP_API_KEY}`;
 
 export function App() {
-  let searchTerm = "avenger";
+  const [searchTerm, setsearchTerm] = useState(" ");
+  const [beingSearched, setBeingSearched] = useState(false);
 
   function searchChangeHandler(event){
-    console.log(event.target.value);
-    const searchTerm = event.target.value;
-    // <requests searchTerm={ searchTerm }/>
-    return searchTerm
+    const searchValue = event.target.value;
+    if (searchValue === "" || searchValue === " " || searchValue === "  " || searchValue === "   " || searchValue === null){
+      setsearchTerm(" ");
+      setBeingSearched(false);
+    }
+    else{
+      console.log(searchValue);
+      setsearchTerm(searchValue);
+      setBeingSearched(true);
+    }
   }
   
   return (
     <div className="App">
-      {/* Nav bar componant */}
       <nav>
         <ul>
           <li><p>RAID</p></li>
@@ -25,7 +33,11 @@ export function App() {
         </ul>
       </nav>
       <Banner/>
-      <RowRetry title="Search Results" fetchURL={requests.fetchSearch} isLargeRow/>
+      { beingSearched === true ? 
+      (<RowRetry title="Search Results" 
+      fetchURL={"/search/multi?api_key="+API_KEY+"&language=en-US&query="+searchTerm+"&page=1&include_adult=false"}
+      isLargeRow/>)
+      : null}
       <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} isLargeRow/>
       <RowRetry title="Trending Now" fetchURL={requests.fetchTrending}/>
       <RowRetry title="Top Rated" fetchURL={requests.fetchTopRated}/>
