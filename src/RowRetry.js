@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "./axios";
 
+import Page from './Page.js'
 import './Row.css'
 import YouTube from "react-youtube"
 import movieTrailer from "movie-trailer"
@@ -10,7 +11,7 @@ const base_url = "https://image.tmdb.org/t/p/original/";
 function RowRetry({ title, fetchURL, isLargeRow }) {
   const [movies, setMovies] = useState([]);
 
-  const [youtubeUrl, setYoutubeUrl] = useState("");
+  const [Clicker, setClicker] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -26,15 +27,15 @@ function RowRetry({ title, fetchURL, isLargeRow }) {
     height: "390",
     width: "100%",
     playerVars: {
-      autoplay: 0,
+      autoplay: 1,
     }
   }
 
   const handleClick = (movie) => {
-    if (youtubeUrl) {
-      setYoutubeUrl('')
+    if (Clicker) {
+      setClicker('')
     } else {
-      setYoutubeUrl("TOsdEEbrl04")
+      setClicker("gMAwNk1m4YQ")
     }
   }
 
@@ -54,10 +55,11 @@ function RowRetry({ title, fetchURL, isLargeRow }) {
             src={`${base_url}${isLargeRow ? movie.poster_path : movie.backdrop_path}`} //if it has isLargeRow use movie.backdrop_path else use the other one
             alt={movie.name}
           />
+          
         ))}
       </div>
 
-      {youtubeUrl && <YouTube videoId={youtubeUrl} opts={opts} />}
+      {Clicker && <Page name={movie.name}/>}
 
     </div>
   );
