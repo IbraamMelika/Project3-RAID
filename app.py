@@ -12,8 +12,9 @@ APP = Flask(__name__, static_folder='./build/static')
 
 load_dotenv(find_dotenv())
 
-# Point SQLAlchemy to your Heroku database
-APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# Point SQLAlchemy to your Heroku database.
+# Replace needed to fix old url being depreciated.
+APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL').replace("postgres://", "postgresql://", 1)
 # Gets rid of a warning
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
