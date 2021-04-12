@@ -39,7 +39,6 @@ SOCKETIO = SocketIO(
 def email_in_person(email):
     '''Returns True is email is in Person, False otherwise'''
     query = Person.query.filter_by(email=email).first()
-    print(query)
     if query is None:
         return False
     return True
@@ -52,6 +51,38 @@ def insert_person(email, username=None):
     new_user = Person(email=email, username=username)
     DB.session.add(new_user)
     DB.session.commit()
+    
+def make_favorite(email, media):
+    '''Make given media a favorite for the user'''
+    
+    new_fav = Favorite(email=email, media=media)
+    DB.session.add(new_fav)
+    DB.session.commit()
+    
+def unfavorite(email, media):
+    '''Unfavorite given media for given user.'''
+    query = Favorite.query.filter_by(email=email, media=media).delete()
+
+def is_favorite(email, media):
+    '''Checks whether the given media is a favorite for that person.'''
+    query = Favorite.query.filter_by(email=email, media=media).first()
+    if query is None:
+        return False
+    return True
+
+def get_all_favorites(email):
+    '''Returns all favorites for that person.'''
+    pass
+
+print(Person.query.filter_by().all())
+em = "user@network.com"
+med = "123"
+if not is_favorite(em,med):
+    make_favorite(em, med)
+print(is_favorite(em,med))
+unfavorite(em, med)
+print(is_favorite(em,med))
+quit()
 
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
