@@ -30,7 +30,7 @@ def define_favorite_class(database):
         media = database.Column(database.String(80), primary_key=True)
 
         def __repr__(self):
-            return '<Favorite Instance: User %r Media {}>'.format(self.email) % self.media
+            return '<Favorite Instance: User {} Media {}>'.format(self.email, self.media)
 
     return Favorite
 
