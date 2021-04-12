@@ -72,16 +72,21 @@ def is_favorite(email, media):
 
 def get_all_favorites(email):
     '''Returns all favorites for that person.'''
-    pass
+    return Favorite.query.filter_by(email=email).all()
 
 print(Person.query.filter_by().all())
 em = "user@network.com"
 med = "123"
+med2 = "abc"
+
 if not is_favorite(em,med):
     make_favorite(em, med)
+    
+if not is_favorite(em,med2):
+    make_favorite(em, med2)
+    
 print(is_favorite(em,med))
-unfavorite(em, med)
-print(is_favorite(em,med))
+print(get_all_favorites(em))
 quit()
 
 @APP.route('/', defaults={"filename": "index.html"})
