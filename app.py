@@ -13,8 +13,9 @@ APP = Flask(__name__, static_folder='./build/static')
 load_dotenv(find_dotenv())
 
 # Point SQLAlchemy to your Heroku database.
-# Replace needed to fix old url being depreciated.
-APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL').replace("postgres://", "postgresql://", 1)
+# Replace fixes old url being depreciated.
+APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL').replace(
+    "postgres://", "postgresql://", 1)
 # Gets rid of a warning
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -34,6 +35,23 @@ SOCKETIO = SocketIO(
     json=json,
     manage_session=False,
 )
+
+def email_in_person(email):
+    '''Returns True is email is in Person, False otherwise'''
+    query = Person.query.filter_by(email=email).first()
+    print(query)
+    if query is None:
+        return False
+    return True
+
+def insert_person(email, username=None):
+    '''Inserts new Person into database.
+    Makes no assumptions about whether or not the user is in the database already.
+    Will create an error if the email is already in the database'''
+
+    new_user = Person(email=email, username=username)
+    DB.session.add(new_user)
+    DB.session.commit()
 
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
