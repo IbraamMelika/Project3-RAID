@@ -51,17 +51,18 @@ def insert_person(email, username=None):
     new_user = Person(email=email, username=username)
     DB.session.add(new_user)
     DB.session.commit()
-    
+
 def make_favorite(email, media):
     '''Make given media a favorite for the user'''
-    
+
     new_fav = Favorite(email=email, media=media)
     DB.session.add(new_fav)
     DB.session.commit()
-    
+
 def unfavorite(email, media):
     '''Unfavorite given media for given user.'''
-    query = Favorite.query.filter_by(email=email, media=media).delete()
+
+    Favorite.query.filter_by(email=email, media=media).delete()
 
 def is_favorite(email, media):
     '''Checks whether the given media is a favorite for that person.'''
@@ -73,21 +74,6 @@ def is_favorite(email, media):
 def get_all_favorites(email):
     '''Returns all favorites for that person.'''
     return Favorite.query.filter_by(email=email).all()
-
-print(Person.query.filter_by().all())
-em = "user@network.com"
-med = "123"
-med2 = "abc"
-
-if not is_favorite(em,med):
-    make_favorite(em, med)
-    
-if not is_favorite(em,med2):
-    make_favorite(em, med2)
-    
-print(is_favorite(em,med))
-print(get_all_favorites(em))
-quit()
 
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
