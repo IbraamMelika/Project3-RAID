@@ -1,9 +1,9 @@
 import React from 'react';
 import { GoogleLogout } from 'react-google-login';
 
-const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_KEY;
+const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
-export default function Logout() {
+function Logout() {
   
   const onSuccess = () => {
     alert('Logout successful');
@@ -12,10 +12,12 @@ export default function Logout() {
   return (
     <div>
       <GoogleLogout
-        clientID={CLIENT_ID}
+        clientId={CLIENT_ID}
         buttonText="Logout"
         onLogoutSuccess={onSuccess}
       ></GoogleLogout>
     </div>
   );
 }
+
+export default Logout;

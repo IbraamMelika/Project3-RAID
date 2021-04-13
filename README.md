@@ -20,4 +20,4 @@ The warning too-few-public-methods has been disabled.
 The warning no-members has been disabled since it would return false positives
 
 ### Google Login
-In a .env add variables REACT_APP_GOOGLE_CLIENT_KEY=YOURKEY and REACT_APP_GOOGLE_SECRET=YOURSECRET
+In a .env add variable REACT_APP_GOOGLE_CLIENT_KEY='YOURKEY'
