@@ -5,10 +5,13 @@ import requests from "./requests"
 import RowRetry from './RowRetry'
 import Banner from './Banner'
 
+import Login from './Login';
+
 function App() {
   return (
     <div className="App">
       {/* Nav bar componant */}
+      <Login />
       <Banner/>
       <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} isLargeRow/>
       <RowRetry title="Trending Now" fetchURL={requests.fetchTrending}/>
