@@ -13,3 +13,4 @@ in a .env file in the same folder as app.py
 
 The warning "invalid-envvar-default" has been disabled.
 The warning too-few-public-methods has been disabled.
+The warning no-members has been disabled since it would return false positives
