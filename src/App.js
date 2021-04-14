@@ -67,7 +67,7 @@ function isFavorite(email, media){
 }
 
 function changeFavorite(email, media, willBeFavorite){
-  //willBeFavorite is a boolean value
+  /* willBeFavorite is a boolean value */
   
   email = encodeURIComponent(email);
   media = encodeURIComponent(media);
@@ -90,14 +90,6 @@ function changeFavorite(email, media, willBeFavorite){
 }
 
 function App() {
-    useEffect(() => {
-      userLoggedIn('test@network.com');
-      getUserInfoByEmail('test@network.com');
-      isFavorite('test@network.com', '123');
-      changeFavorite('test@network.com', '123', true);
-      isFavorite('test@network.com', '123');
-    }, []);
-  
   return (
     <div className="App">
       {/* Nav bar componant */}
