@@ -8,6 +8,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import models
 import random
+from urllib.parse import unquote
 
 APP = Flask(__name__, static_folder='./build/static')
 
@@ -83,6 +84,7 @@ def remove_favorite(email, media):
     '''Unfavorite given media for given user.'''
 
     Favorite.query.filter_by(email=email, media=media).delete()
+    DB.session.commit()
 
 def get_all_favorites(email):
     '''Returns all favorites for that person.'''
@@ -123,8 +125,10 @@ def endpoint_person():
     print(request)
     
     if request.method == 'GET':
-        email = request.args.get('email', '')
-        username = request.args.get('username', '')
+        ''' Return a Person's data '''
+        print("Got GET from person")
+        email = unquote(request.args.get('email', ''))
+        username = unquote(request.args.get('username', ''))
 
         if email != '':
             person = get_person_by_email(email)
@@ -138,7 +142,7 @@ def endpoint_person():
         
         print("Got POST from person")
         request_data = request.get_json()
-        email = request_data['email']
+        email = unquote(request_data['email'])
         print(email)
         
         if is_person(email):
@@ -150,7 +154,49 @@ def endpoint_person():
             return {'success': True, 'newUser': True}
 
 
-    return {'success': True} # Return success status if it worked
+    return {'success': False} # Return success status if it worked
+    
+@APP.route('/api/v1/favorite', methods=['GET', 'POST'])
+def endpoint_favorite():
+    '''Endpoint for Favorite class interactions.'''
+    
+    print("Favorite Endpoint Reached")
+    print(request)
+    
+    if request.method == 'GET':
+        '''Get whether or not the given media is a favorite for the given user.'''
+        
+        print("Got GET from Favorite")
+        email = unquote(request.args.get('email', ''))
+        username = unquote(request.args.get('username', ''))
+        media = unquote(request.args.get('media', ''))
+        
+        if email != '' and media != '':
+            return {'isFavorite': is_favorite(email, media)}
+            
+    elif request.method == 'POST':
+        ''' Change whether or not something is favorited '''
+        
+        print("Got POST from Favorite")
+        request_data = request.get_json()
+        email = unquote(request_data['email'])
+        media = unquote(request_data['media'])
+        willBeFavorite = request_data['willBeFavorite']
+        
+        is_fav = is_favorite(email, media)
+        print(willBeFavorite, is_fav, email)
+        
+        if willBeFavorite:
+            if not is_fav:
+                add_favorite(email, media)
+                return {'success': True}
+        else:
+            if is_fav:
+                remove_favorite(email, media)
+                return {'success': True}
+                
+    return {'success': False}
+
 
 if __name__ == "__main__":
     APP.run(

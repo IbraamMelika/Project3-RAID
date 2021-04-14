@@ -9,6 +9,7 @@ import Banner from './Banner'
 require('isomorphic-fetch');
 
 function userLoggedIn(email){
+    email = encodeURIComponent(email);
     const data = JSON.stringify({'email': email})
     
     fetch("/api/v1/person", {
@@ -29,7 +30,6 @@ function userLoggedIn(email){
 function getUserInfoByEmail(email){
   email = encodeURIComponent(email);
   const url = "/api/v1/person?email=" + email;
-  console.log("URL " + url)
   
   fetch(url, {
       method: 'GET',
@@ -46,9 +46,56 @@ function getUserInfoByEmail(email){
       });
 }
 
+function isFavorite(email, media){
+  email = encodeURIComponent(email);
+  media = encodeURIComponent(media);
+  
+  const url = "/api/v1/favorite?email=" + email + "&media=" + media;
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         }
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        const isFavorite = responseData.isFavorite;
+        console.log("Is Favorite: " + isFavorite);
+      });
+}
+
+function changeFavorite(email, media, willBeFavorite){
+  //willBeFavorite is a boolean value
+  
+  email = encodeURIComponent(email);
+  media = encodeURIComponent(media);
+  
+  const url = "/api/v1/favorite";
+  const data = JSON.stringify({'email': email, 'media': media, 'willBeFavorite': willBeFavorite});
+  
+  fetch(url, {
+      method: 'POST',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+         body: data
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData);
+      });
+}
+
 function App() {
     useEffect(() => {
+      userLoggedIn('test@network.com');
       getUserInfoByEmail('test@network.com');
+      isFavorite('test@network.com', '123');
+      changeFavorite('test@network.com', '123', true);
+      isFavorite('test@network.com', '123');
     }, []);
   
   return (
