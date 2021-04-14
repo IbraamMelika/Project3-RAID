@@ -9,6 +9,10 @@ Alternatively, put the line
 DATABASE_URL='url goes here'
 in a .env file in the same folder as app.py
 
+### NPM Requirements
+
+npm install --save isomorphic-fetch
+
 ### Python Linting
 
 The warning "invalid-envvar-default" has been disabled.
