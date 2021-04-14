@@ -1,11 +1,35 @@
 import React from 'react'
+import { useState, useRef, useEffect } from 'react';
 import './App.css';
 import requests from "./requests"
 
 import RowRetry from './RowRetry'
 import Banner from './Banner'
 
+require('isomorphic-fetch');
+
+function userLoggedIn(email){
+    const data = JSON.stringify({'email': email})
+    
+    fetch("/api/v1/person", {
+         method: 'POST',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+         body: data,
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData.newUser)
+      });
+}
+
 function App() {
+    useEffect(() => {
+      userLoggedIn('test@network.com');
+    }, []);
+  
   return (
     <div className="App">
       {/* Nav bar componant */}

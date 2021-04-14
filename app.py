@@ -2,11 +2,12 @@
 
 import os
 from dotenv import load_dotenv, find_dotenv
-from flask import Flask, send_from_directory, json
+from flask import Flask, send_from_directory, json, jsonify, request, Response
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import models
+import random
 
 APP = Flask(__name__, static_folder='./build/static')
 
@@ -47,6 +48,9 @@ def add_person(email, username=None):
     '''Inserts new Person into database.
     Makes no assumptions about whether or not the user is in the database already.
     Will create an error if the email is already in the database'''
+    
+    if username is None:
+        username = email[:3] + str(random.randint(0,1000))
 
     new_user = Person(email=email, username=username)
     DB.session.add(new_user)
@@ -96,10 +100,39 @@ def index(filename):
     '''Returns index.'''
     return send_from_directory('./build', filename)
 
-@APP.route('/api/v1/test', methods=['GET'])
-def test_route():
+@APP.route('/api/v1/test', methods=['GET', 'POST'])
+def test_endpoint():
     '''Returns success response'''
-    return {'success': True, "statusText": "Got Response"}
+    
+    print("Endpoint Reached")
+    return {'success': True} # Return success status if it worked
+
+@APP.route('/api/v1/person', methods=['GET', 'POST'])
+def endpoint_person():
+    '''Endpoint for Person class interactions.'''
+    
+    print("Person Endpoint Reached")
+    
+    if request.method == 'GET':
+        pass
+    elif request.method == 'POST':
+        '''Notifies server of user log in.
+        Creates new user if needed.
+        Returns success and whether or not the user is new'''
+        
+        print("Got POST from person")
+        request_data = request.get_json()
+        email = request_data['email']
+        print(email)
+        
+        if is_person(email):
+            return {'success': True, 'newUser': False}
+        else:
+            add_person(email)
+            return {'success': True, 'newUser': True}
+
+
+    return {'success': True} # Return success status if it worked
 
 if __name__ == "__main__":
     APP.run(
