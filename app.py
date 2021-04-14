@@ -37,9 +37,16 @@ SOCKETIO = SocketIO(
     manage_session=False,
 )
 
+def get_person_by_email(email):
+    '''Retrieve a person from the database'''
+    
+    query = Person.query.filter_by(email=email).first()
+    return query
+
 def is_person(email):
     '''Returns True is email is in Person, False otherwise'''
-    query = Person.query.filter_by(email=email).first()
+    
+    query = get_person_by_email(email)
     if query is None:
         return False
     return True
@@ -55,6 +62,7 @@ def add_person(email, username=None):
     new_user = Person(email=email, username=username)
     DB.session.add(new_user)
     DB.session.commit()
+    
 
 def is_favorite(email, media):
     '''Checks whether the given media is a favorite for that person.'''
@@ -112,9 +120,17 @@ def endpoint_person():
     '''Endpoint for Person class interactions.'''
     
     print("Person Endpoint Reached")
+    print(request)
     
     if request.method == 'GET':
-        pass
+        email = request.args.get('email', '')
+        username = request.args.get('username', '')
+
+        if email != '':
+            person = get_person_by_email(email)
+            print(person)
+            return {'email' : person.email, 'username' : person.username, 'joinDate': person.joinDate}
+
     elif request.method == 'POST':
         '''Notifies server of user log in.
         Creates new user if needed.
@@ -126,8 +142,10 @@ def endpoint_person():
         print(email)
         
         if is_person(email):
+            print("Person already in DB")
             return {'success': True, 'newUser': False}
         else:
+            print("Person not in DB")
             add_person(email)
             return {'success': True, 'newUser': True}
 

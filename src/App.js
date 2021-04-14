@@ -21,13 +21,34 @@ function userLoggedIn(email){
      .then(response => {
         return response.json();
       }).then(responseData => {
-        console.log(responseData.newUser)
+        const success = responseData.success;
+        const isNewUser = responseData.newUser;
+      });
+}
+
+function getUserInfoByEmail(email){
+  email = encodeURIComponent(email);
+  const url = "/api/v1/person?email=" + email;
+  console.log("URL " + url)
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        const returnedEmail = responseData.email;
+        const username = responseData.username;
+        const joinDate = responseData.joinDate;
       });
 }
 
 function App() {
     useEffect(() => {
-      userLoggedIn('test@network.com');
+      getUserInfoByEmail('test@network.com');
     }, []);
   
   return (
