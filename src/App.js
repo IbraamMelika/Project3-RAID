@@ -109,9 +109,9 @@ function App() {
   }
   
   return (
-    <div className="App">
+    <div>
       {appShown === true ? (
-        <div>
+        <div className="App">
           {/* Nav bar componant */}
           <Logout hidePage={hidePage}/>
           <Banner/>
