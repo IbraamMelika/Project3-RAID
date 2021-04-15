@@ -14,7 +14,7 @@ def define_person_class(database):
         '''Class for Person data model'''
 
         email = database.Column(database.String(80), primary_key=True)
-        username = database.Column(database.String(80), default="DefaultUsername")
+        username = database.Column(database.String(80), default="DefaultUsername", unique=True)
         joinDate = database.Column(database.DateTime(timezone=True), default=func.now())
 
         def __repr__(self):
