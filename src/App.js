@@ -1,14 +1,19 @@
 /* eslint-disable no-unused-vars */
 
-import React from 'react'
+import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import './App.css';
-import requests from "./requests"
+import requests from "./requests";
 
-import RowRetry from './RowRetry'
-import Banner from './Banner'
+import RowRetry from './RowRetry';
+import Banner from './Banner';
+
+import Login from './Login';
+import Logout from './Logout';
 
 require('isomorphic-fetch');
+
+
 
 function userLoggedIn(email){
     email = encodeURIComponent(email);
@@ -92,17 +97,39 @@ function changeFavorite(email, media, willBeFavorite){
 }
 
 function App() {
+  
+  const [appShown, setShown] = useState([false]);
+  
+  function showPage() {
+    setShown(true);
+  }
+  
+  function hidePage() {
+    setShown(false);
+  }
+  
   return (
-    <div className="App">
-      {/* Nav bar componant */}
-      <Banner/>
-      <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} isLargeRow/>
-      <RowRetry title="Trending Now" fetchURL={requests.fetchTrending}/>
-      <RowRetry title="Top Rated" fetchURL={requests.fetchTopRated}/>
-      <RowRetry title="Action Movies" fetchURL={requests.fetchActionMovies}/>
-      <RowRetry title="Comedy Movies" fetchURL={requests.fetchComedyMovies}/>
-      <RowRetry title="Horror Movies" fetchURL={requests.fetchHorrorMovies}/>
-      <RowRetry title="Documentaries" fetchURL={requests.fetchDocumentaries}/>
+    <div>
+      {appShown === true ? (
+        <div className="App">
+          {/* Nav bar componant */}
+          <Logout hidePage={hidePage}/>
+          <Banner/>
+          <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} isLargeRow/>
+          <RowRetry title="Trending Now" fetchURL={requests.fetchTrending}/>
+          <RowRetry title="Top Rated" fetchURL={requests.fetchTopRated}/>
+          <RowRetry title="Action Movies" fetchURL={requests.fetchActionMovies}/>
+          <RowRetry title="Comedy Movies" fetchURL={requests.fetchComedyMovies}/>
+          <RowRetry title="Horror Movies" fetchURL={requests.fetchHorrorMovies}/>
+          <RowRetry title="Documentaries" fetchURL={requests.fetchDocumentaries}/>
+        </div>
+      )
+        : (
+          <div>
+            <Login showPage={showPage}/>
+            <Logout hidePage={hidePage}/>
+          </div>
+        )}      
     </div>
   );
 }
