@@ -1,6 +1,19 @@
 import React from 'react'
 
+import YouTube from "react-youtube"
+import movieTrailer from "movie-trailer"
+
 function Page({name}) {
+
+    //you need this for the youtube video size
+    const opts = {
+        height: "390",
+        width: "100%",
+        playerVars: {
+          autoplay: 1,
+        }
+      }
+
     return (
         <div>
             <h1>
