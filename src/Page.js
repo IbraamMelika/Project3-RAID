@@ -19,6 +19,8 @@ function Page({name}) {
             <h1>
             This is the page for {name}
             </h1>
+            
+            <YouTube videoId={"stcATlmqAiA"} opts={opts}/>
         </div>
     )
 }
