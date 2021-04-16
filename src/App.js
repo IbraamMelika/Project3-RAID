@@ -130,6 +130,7 @@ export function App() {
               <input type="text" id="searchValue" placeholder="Search" class="search" onChange={searchChangeHandler}/>
             </ul>
           </nav>
+      <Logout hidePage={hidePage}/> 
           <Banner/>
           { beingSearched === true ? 
           (<RowRetry title="Search Results" 
