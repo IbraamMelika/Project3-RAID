@@ -6,6 +6,47 @@
   background-color: #111;
 }
 
+/*ul{*/
+/*  width: auto;*/
+/*  float: right;*/
+/*  margin-top: 8px;*/
+/*}*/
+
+li{
+  display: inline-block;
+  padding: 15px 30px;
+}
+
+a{
+  text-align: center;
+  color: #ffffff;
+  text-decoration: none;
+  font-family: 'open Sans', sans-serif;
+  font-size: 1.2vw;
+}
+
+a:hover{
+  color: #61FF33;
+  transition: 0.5s;
+}
+
+p{
+  text-decoration: none;
+  font-family: 'open Sans', sans-serif;
+  color: #61FF33;
+  font-size: 1.2vw;
+}
+
+input{
+  justify-content: flex-end;
+  font-size: 24;
+  display: flex;
+  width: 99%;
+  /*padding: 0.5rem 1.5rem;*/
+  /*border: 2px solid;*/
+  /*border-radius: 50px;*/
+  /*background-color: transparent;*/
+}
 /* Hooks button */
 .button {
   cursor: pointer;

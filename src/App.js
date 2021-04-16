@@ -1,19 +1,16 @@
 /* eslint-disable no-unused-vars */
-
-import React from 'react';
-import { useState, useRef, useEffect } from 'react';
-import './App.css';
-import requests from "./requests";
-
-import RowRetry from './RowRetry';
-import Banner from './Banner';
-
+import React from 'react'
+import './App.css'
+import requests from './requests'
+import RowRetry from './RowRetry'
+import Banner from './Banner'
 import Login from './Login';
 import Logout from './Logout';
+import { useState, useRef, useEffect } from 'react';
+
+const API_KEY =`${process.env.REACT_APP_API_KEY}`;
 
 require('isomorphic-fetch');
-
-
 
 function userLoggedIn(email){
     email = encodeURIComponent(email);
@@ -96,9 +93,23 @@ function changeFavorite(email, media, willBeFavorite){
       });
 }
 
-function App() {
-  
+export function App() {
+  const [searchTerm, setsearchTerm] = useState(" ");
+  const [beingSearched, setBeingSearched] = useState(false);
   const [appShown, setShown] = useState([false]);
+
+  function searchChangeHandler(event){
+    const searchValue = event.target.value;
+    if (searchValue === "" || searchValue === " " || searchValue === "  " || searchValue === "   " || searchValue === null){
+      setsearchTerm(" ");
+      setBeingSearched(false);
+    }
+    else{
+      console.log(searchValue);
+      setsearchTerm(searchValue);
+      setBeingSearched(true);
+    }
+  }
   
   function showPage() {
     setShown(true);
@@ -110,11 +121,22 @@ function App() {
   
   return (
     <div>
-      {appShown === true ? (
+    {appShown === true ? (
         <div className="App">
-          {/* Nav bar componant */}
-          <Logout hidePage={hidePage}/>
+          <nav>
+            <ul>
+              <li><p>RAID</p></li>
+              <li><a href='default.asp'>Search!</a></li>
+              <input type="text" id="searchValue" placeholder="Search" class="search" onChange={searchChangeHandler}/>
+            </ul>
+          </nav>
+      <Logout hidePage={hidePage}/> 
           <Banner/>
+          { beingSearched === true ? 
+          (<RowRetry title="Search Results" 
+          fetchURL={"/search/multi?api_key="+API_KEY+"&language=en-US&query="+searchTerm+"&page=1&include_adult=false"}
+          isLargeRow/>)
+          : null}
           <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} isLargeRow/>
           <RowRetry title="Trending Now" fetchURL={requests.fetchTrending}/>
           <RowRetry title="Top Rated" fetchURL={requests.fetchTopRated}/>
@@ -122,15 +144,14 @@ function App() {
           <RowRetry title="Comedy Movies" fetchURL={requests.fetchComedyMovies}/>
           <RowRetry title="Horror Movies" fetchURL={requests.fetchHorrorMovies}/>
           <RowRetry title="Documentaries" fetchURL={requests.fetchDocumentaries}/>
-        </div>
-      )
-        : (
+      </div>
+    ) : (
           <div>
             <Login showPage={showPage}/>
             <Logout hidePage={hidePage}/>
           </div>
         )}      
-    </div>
+ </div>
   );
 }
 
