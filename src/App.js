@@ -1,9 +1,9 @@
-import React from 'react';
-import './App.css';
-import requests from './requests';
-import RowRetry from './RowRetry';
-import Banner from './Banner';
-import { useState } from 'react';
+import React from 'react'
+import './App.css'
+import requests from './requests'
+import RowRetry from './RowRetry'
+import Banner from './Banner'
+import { useState } from 'react'
 const API_KEY =`${process.env.REACT_APP_API_KEY}`;
 
 export function App() {
