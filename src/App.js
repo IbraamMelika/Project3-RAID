@@ -13,8 +13,6 @@ import Logout from './Logout';
 
 require('isomorphic-fetch');
 
-
-
 function userLoggedIn(email){
     email = encodeURIComponent(email);
     const data = JSON.stringify({'email': email})
@@ -98,7 +96,7 @@ function changeFavorite(email, media, willBeFavorite){
 
 function App() {
   
-  const [appShown, setShown] = useState([false]);
+  const [appShown, setShown] = useState(false);
   
   function showPage() {
     setShown(true);
