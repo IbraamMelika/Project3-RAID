@@ -132,19 +132,19 @@ export function App() {
     <div>
     {appShown === true ? (
       <div className="App">
-      
-        <h1 style={{color:'red'}}>HELLO TESTING USER STUFF: {userImage}</h1>
-        
-        <Logout hidePage={hidePage}/> 
-        
-          <div class="topNav">
+          <nav className="grid">
             <ul>
-              <li><p>RAID</p></li>
-              <li><a href='default.asp'>Search!</a></li>
-              <input type="text" id="searchValue" placeholder="Search" class="search" onChange={searchChangeHandler}/>
+              <li><a href='defaul.asp'>Movie Finder</a></li>
+              <li><a href='defaul.asp'>Watchlist</a></li>
+              <li><a href='defaul.asp'>Favorites</a></li>
+              <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
+              <li><a href='defaul.asp'>{userName}</a></li>
+              <li><Logout hidePage={hidePage}/></li>
             </ul>
+          </nav>
+          <div className="search-div">
+            <input type="text" id="searchValue" placeholder="Search Movie..." className="searchbar" onChange={searchChangeHandler}/>
           </div>
-          
           <Banner/>
           { beingSearched === true ? 
           (<RowRetry title="Search Results" 
@@ -161,7 +161,7 @@ export function App() {
       </div>
     ) : (
           <div>
-            <Login showPage={showPage} sendUserInfo={grabUserInfo}/>
+            <Login showPage={showPage} grabUserInfo={grabUserInfo}/>
           </div>
         )}      
  </div>

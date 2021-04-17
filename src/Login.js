@@ -11,7 +11,7 @@ function Login(prop) {
       `Logged in successfully welcome ${res.profileObj.name} See console for full profile object.`
     );
     prop.showPage();
-    prop.sendUserInfo(res.profileObj)
+    prop.grabUserInfo(res.profileObj)
   };
   
   const onFailure = (res) => {
@@ -32,7 +32,6 @@ function Login(prop) {
     <div>
       <button onClick={signIn} className="button">
         <img src="google.svg" alt="google login" className="icon"></img>
-  
         <span className="buttonText">Sign in with Google</span>
       </button>
     </div>
