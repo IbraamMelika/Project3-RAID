@@ -135,9 +135,9 @@ export function App() {
       <div className="App">
           <nav className="grid">
             <ul>
-              <li><a href='defaul.asp'>Movie Finder</a></li>
-              <li><a href='defaul.asp'>Watchlist</a></li>
-              <li><a href='defaul.asp'>Favorites</a></li>
+              <li><a href='default.asp'>Movie Finder</a></li>
+              <li><a href='default.asp'>Watchlist</a></li>
+              <li><a href='default.asp'>Favorites</a></li>
               <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
               <li><a href='defaul.asp'>{userName}</a></li>
               <li><Logout hidePage={hidePage}/></li>
