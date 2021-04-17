@@ -126,6 +126,7 @@ export function App() {
     setUserName(data.name);
     setUserImage(data.imageUrl);
     console.log("User email: "+data.email);
+    userLoggedIn(data.email)
   };
   
   return (
