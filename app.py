@@ -65,8 +65,9 @@ def add_person(email, username=None):
     DB.session.add(new_user)
     DB.session.commit()
     return get_all_users()
-    
+
 def get_all_users():
+    '''Returns all person from the Database.'''
     all_people = Person.query.all()
     users = []
     for person in all_people:
