@@ -4,7 +4,6 @@ import YouTube from "react-youtube"
 import movieTrailer from "movie-trailer"
 
 function Page({name}) {
-
     const [trailerURL, setTrailerURL] = useState("");
 
     //const theName = {name}
@@ -21,6 +20,7 @@ function Page({name}) {
     var nameStringy = JSON.stringify({name})
     var obj = JSON.parse(nameStringy)
     var values = Object.values(obj)
+    //values [0] is the name of the movie
     
 
     handleClick(values[0])
