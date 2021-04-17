@@ -1,1 +1,11 @@
-Flask
+flask
+flask_socketio
+flask_cors
+flask_sqlalchemy
+python-dotenv
+psycopg2-binary 
+pylint==2.4.4
+pylint-django==2.3.0
+pylint-flask==0.6
+pylint-flask-sqlalchemy==0.2.0
+pylint-plugin-utils==0.6
