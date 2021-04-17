@@ -7,7 +7,7 @@ function Logout(prop) {
   
   const onLogoutSuccess = (res) => {
     console.log('Logged out Success');
-    alert('Logged out successful');
+    console.log('Logged out successful');
     prop.hidePage();
   };
   
@@ -22,11 +22,7 @@ function Logout(prop) {
   });
   
   return (
-    <button onClick={signOut} className="button">
-      <img src="google.svg" alt="google logout" className="icon"></img>
-
-      <span className="buttonText">Sign out</span>
-    </button>
+    <div className="logout" onClick={signOut}>Logout</div>
   );
 }
 
