@@ -7,7 +7,7 @@ function Logout(prop) {
   
   const onLogoutSuccess = (res) => {
     console.log('Logged out Success');
-    alert('Logged out successful');
+    console.log('Logged out successful');
     prop.hidePage();
   };
   

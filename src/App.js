@@ -96,8 +96,10 @@ function changeFavorite(email, media, willBeFavorite){
 export function App() {
   const [searchTerm, setsearchTerm] = useState(" ");
   const [beingSearched, setBeingSearched] = useState(false);
-  const [appShown, setShown] = useState([false]);
-
+  const [appShown, setShown] = useState(false);
+  const [userImage, setUserImage] = useState('');
+  const [userName, setUserName] = useState('');
+  
   function searchChangeHandler(event){
     const searchValue = event.target.value;
     if (searchValue === "" || searchValue === " " || searchValue === "  " || searchValue === "   " || searchValue === null){
@@ -119,18 +121,30 @@ export function App() {
     setShown(false);
   }
   
+  // Grab google user info from login component
+  const grabUserInfo = (data) => { 
+    setUserName(data.name);
+    setUserImage(data.imageUrl);
+    console.log("User email: "+data.email);
+  };
+  
   return (
     <div>
     {appShown === true ? (
-        <div className="App">
-          <nav>
+      <div className="App">
+      
+        <h1 style={{color:'red'}}>HELLO TESTING USER STUFF: {userImage}</h1>
+        
+        <Logout hidePage={hidePage}/> 
+        
+          <div class="topNav">
             <ul>
               <li><p>RAID</p></li>
               <li><a href='default.asp'>Search!</a></li>
               <input type="text" id="searchValue" placeholder="Search" class="search" onChange={searchChangeHandler}/>
             </ul>
-          </nav>
-      <Logout hidePage={hidePage}/> 
+          </div>
+          
           <Banner/>
           { beingSearched === true ? 
           (<RowRetry title="Search Results" 
@@ -147,8 +161,7 @@ export function App() {
       </div>
     ) : (
           <div>
-            <Login showPage={showPage}/>
-            <Logout hidePage={hidePage}/>
+            <Login showPage={showPage} sendUserInfo={grabUserInfo}/>
           </div>
         )}      
  </div>
