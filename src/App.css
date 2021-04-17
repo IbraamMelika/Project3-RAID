@@ -1,9 +1,49 @@
 *{
   margin: 0;
+  padding: 0;
 }
 
-.App{
+.App {
   background-color: #111;
+}
+
+.grid ul{
+  display: grid;
+  grid-auto-flow: column;
+  padding: 10px;
+  justify-items: center;
+  list-style:none;
+}
+
+.grid a{
+  text-decoration: none;
+  color: white;
+}
+
+.grid a:hover{
+  color: red;
+}
+
+.search-div{
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.searchbar {
+  height: 30px;
+  width: 250px;
+}
+
+.google-profile-pic {
+  width: 30px;  
+}
+
+.logout {
+  color:white;
+}
+
+.logout:hover {
+  color: red;
 }
 
 /* Hooks button */

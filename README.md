@@ -4,6 +4,8 @@ Current Heroku URL: https://thawing-meadow-87139.herokuapp.com/
 1. npm install axios
 2. npm i react-google-login
 3. npm install --save isomorphic-fetch
+4. npm i react-youtube
+5. npm i movie-trailer
 
 ### Postgre Database Connection
 

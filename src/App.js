@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-vars */
-
-import React from 'react';
-import { useState, useRef, useEffect } from 'react';
-import './App.css';
-import requests from "./requests";
-
-import RowRetry from './RowRetry';
-import Banner from './Banner';
-
+import React from 'react'
+import './App.css'
+import requests from './requests'
+import RowRetry from './RowRetry'
+import Banner from './Banner'
 import Login from './Login';
 import Logout from './Logout';
+import { useState, useRef, useEffect } from 'react';
+
+const API_KEY =`${process.env.REACT_APP_API_KEY}`;
 
 require('isomorphic-fetch');
 
@@ -94,9 +93,25 @@ function changeFavorite(email, media, willBeFavorite){
       });
 }
 
-function App() {
-  
+export function App() {
+  const [searchTerm, setsearchTerm] = useState(" ");
+  const [beingSearched, setBeingSearched] = useState(false);
   const [appShown, setShown] = useState(false);
+  const [userImage, setUserImage] = useState('');
+  const [userName, setUserName] = useState('');
+  
+  function searchChangeHandler(event){
+    const searchValue = event.target.value;
+    if (searchValue === "" || searchValue === " " || searchValue === "  " || searchValue === "   " || searchValue === null){
+      setsearchTerm(" ");
+      setBeingSearched(false);
+    }
+    else{
+      console.log(searchValue);
+      setsearchTerm(searchValue);
+      setBeingSearched(true);
+    }
+  }
   
   function showPage() {
     setShown(true);
@@ -106,13 +121,36 @@ function App() {
     setShown(false);
   }
   
+  // Grab google user info from login component
+  const grabUserInfo = (data) => { 
+    setUserName(data.name);
+    setUserImage(data.imageUrl);
+    console.log("User email: "+data.email);
+  };
+  
   return (
     <div>
-      {appShown === true ? (
-        <div className="App">
-          {/* Nav bar componant */}
-          <Logout hidePage={hidePage}/>
+    {appShown === true ? (
+      <div className="App">
+          <nav className="grid">
+            <ul>
+              <li><a href='defaul.asp'>Movie Finder</a></li>
+              <li><a href='defaul.asp'>Watchlist</a></li>
+              <li><a href='defaul.asp'>Favorites</a></li>
+              <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
+              <li><a href='defaul.asp'>{userName}</a></li>
+              <li><Logout hidePage={hidePage}/></li>
+            </ul>
+          </nav>
+          <div className="search-div">
+            <input type="text" id="searchValue" placeholder="Search Movie..." className="searchbar" onChange={searchChangeHandler}/>
+          </div>
           <Banner/>
+          { beingSearched === true ? 
+          (<RowRetry title="Search Results" 
+          fetchURL={"/search/multi?api_key="+API_KEY+"&language=en-US&query="+searchTerm+"&page=1&include_adult=false"}
+          isLargeRow/>)
+          : null}
           <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} isLargeRow/>
           <RowRetry title="Trending Now" fetchURL={requests.fetchTrending}/>
           <RowRetry title="Top Rated" fetchURL={requests.fetchTopRated}/>
@@ -120,15 +158,13 @@ function App() {
           <RowRetry title="Comedy Movies" fetchURL={requests.fetchComedyMovies}/>
           <RowRetry title="Horror Movies" fetchURL={requests.fetchHorrorMovies}/>
           <RowRetry title="Documentaries" fetchURL={requests.fetchDocumentaries}/>
-        </div>
-      )
-        : (
+      </div>
+    ) : (
           <div>
-            <Login showPage={showPage}/>
-            <Logout hidePage={hidePage}/>
+            <Login showPage={showPage} grabUserInfo={grabUserInfo}/>
           </div>
         )}      
-    </div>
+ </div>
   );
 }
 
