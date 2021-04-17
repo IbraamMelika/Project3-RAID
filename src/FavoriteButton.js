@@ -27,10 +27,11 @@ function FavoriteButton({email, media}) {
 }
 
     
-    // add a state to keep track of whether or not this media  is favorited or not
-    // If the function is favorited, Display the text "Unfavorite. If it is unfavorited, display "Favorite"
-    //when the button is clicked, use the chabgeFavorite function to tell the server to set it from favorite to unfavorite, or vice versa
-    // Then, set the state here that keeps track of whether or not the thing is favorited to the opposite of what it is.
+    // add a state called isFavoriteState to keep track of whether or not this media  is favorited or not
+    // Call the fucntion isFavorite. Inside the function, add a line to save the server result to isFavoriteState
+    // If the function is favorited, Display the text "Unfavorite". If it is unfavorited, display "Favorite"
+    // when the button is clicked, use the changeFavorite function to tell the server to set it from favorite to unfavorite, or vice versa
+    // Then, set the isFavoriteState here to the opposite of what it is.
     
     const handleClick = (something) => {
        
