@@ -64,7 +64,14 @@ def add_person(email, username=None):
     new_user = Person(email=email, username=username)
     DB.session.add(new_user)
     DB.session.commit()
-
+    return get_all_users()
+    
+def get_all_users():
+    all_people = Person.query.all()
+    users = []
+    for person in all_people:
+        users.append(person)
+    return users
 
 def is_favorite(email, media):
     '''Checks whether the given media is a favorite for that person.'''
@@ -80,6 +87,7 @@ def add_favorite(email, media):
     new_fav = Favorite(email=email, media=media)
     DB.session.add(new_fav)
     DB.session.commit()
+    return get_all_favorites(email)
 
 def remove_favorite(email, media):
     '''Unfavorite given media for given user.'''
@@ -89,8 +97,8 @@ def remove_favorite(email, media):
 
 def get_all_favorites(email):
     '''Returns all favorites for that person.'''
-
-    return Favorite.query.filter_by(email=email).all()
+    all_fav = Favorite.query.filter_by(email=email).all()
+    return all_fav
 
 def add_comment(email, message, media):
     '''Add a comment. Timestamp automatically generated.'''
