@@ -7,10 +7,11 @@ function Login(prop) {
   
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res.profileObj);
-    alert(
+    console.log(
       `Logged in successfully welcome ${res.profileObj.name} See console for full profile object.`
     );
     prop.showPage();
+    prop.grabUserInfo(res.profileObj)
   };
   
   const onFailure = (res) => {
@@ -28,11 +29,12 @@ function Login(prop) {
   });
   
   return (
-    <button onClick={signIn} className="button">
-      <img src="google.svg" alt="google login" className="icon"></img>
-
-      <span className="buttonText">Sign in with Google</span>
-    </button>
+    <div>
+      <button onClick={signIn} className="button">
+        <img src="google.svg" alt="google login" className="icon"></img>
+        <span className="buttonText">Sign in with Google</span>
+      </button>
+    </div>
   );
 }
 
