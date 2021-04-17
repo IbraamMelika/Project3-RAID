@@ -106,7 +106,7 @@ export function App() {
       setsearchTerm(" ");
       setBeingSearched(false);
     }
-    else{
+    else {
       console.log(searchValue);
       setsearchTerm(searchValue);
       setBeingSearched(true);
@@ -125,7 +125,7 @@ export function App() {
   const grabUserInfo = (data) => { 
     setUserName(data.name);
     setUserImage(data.imageUrl);
-    userLoggedIn(data.email)
+    userLoggedIn(data.email);
     console.log("User email: "+data.email);
   };
   
