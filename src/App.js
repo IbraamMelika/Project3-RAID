@@ -121,12 +121,12 @@ export function App() {
     setShown(false);
   }
   
-  // Grab google user info from login component
+  // Grab google user info from login component and push to database
   const grabUserInfo = (data) => { 
     setUserName(data.name);
     setUserImage(data.imageUrl);
-    console.log("User email: "+data.email);
     userLoggedIn(data.email)
+    console.log("User email: "+data.email);
   };
   
   return (
