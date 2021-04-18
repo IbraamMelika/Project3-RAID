@@ -95,6 +95,7 @@ def remove_favorite(email, media):
 
     Favorite.query.filter_by(email=email, media=media).delete()
     DB.session.commit()
+    return get_all_favorites(email)
 
 def get_all_favorites(email):
     '''Returns all favorites for that person.'''
