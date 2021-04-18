@@ -96,8 +96,10 @@ function changeFavorite(email, media, willBeFavorite){
 export function App() {
   const [searchTerm, setsearchTerm] = useState(" ");
   const [beingSearched, setBeingSearched] = useState(false);
-  const [appShown, setShown] = useState([false]);
-
+  const [appShown, setShown] = useState(false);
+  const [userImage, setUserImage] = useState('');
+  const [userName, setUserName] = useState('');
+  
   function searchChangeHandler(event){
     const searchValue = event.target.value;
     if (searchValue === "" || searchValue === " " || searchValue === "  " || searchValue === "   " || searchValue === null){
@@ -119,18 +121,30 @@ export function App() {
     setShown(false);
   }
   
+  // Grab google user info from login component
+  const grabUserInfo = (data) => { 
+    setUserName(data.name);
+    setUserImage(data.imageUrl);
+    console.log("User email: "+data.email);
+  };
+  
   return (
     <div>
     {appShown === true ? (
-        <div className="App">
-          <nav>
+      <div className="App">
+          <nav className="grid">
             <ul>
-              <li><p>RAID</p></li>
-              <li><a href='default.asp'>Search!</a></li>
-              <input type="text" id="searchValue" placeholder="Search" class="search" onChange={searchChangeHandler}/>
+              <li><a href='defaul.asp'>Movie Finder</a></li>
+              <li><a href='defaul.asp'>Watchlist</a></li>
+              <li><a href='defaul.asp'>Favorites</a></li>
+              <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
+              <li><a href='defaul.asp'>{userName}</a></li>
+              <li><Logout hidePage={hidePage}/></li>
             </ul>
           </nav>
-      <Logout hidePage={hidePage}/> 
+          <div className="search-div">
+            <input type="text" id="searchValue" placeholder="Search Movie..." className="searchbar" onChange={searchChangeHandler}/>
+          </div>
           <Banner/>
           { beingSearched === true ? 
           (<RowRetry title="Search Results" 
@@ -147,8 +161,7 @@ export function App() {
       </div>
     ) : (
           <div>
-            <Login showPage={showPage}/>
-            <Logout hidePage={hidePage}/>
+            <Login showPage={showPage} grabUserInfo={grabUserInfo}/>
           </div>
         )}      
  </div>
