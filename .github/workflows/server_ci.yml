@@ -40,5 +40,9 @@ jobs:
       - name: Lint files
         run: pylint ./*.py
         
+      - name: setup env variable
+        env: 
+            DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        
       - name: Run tests
         run: python -m unittest
