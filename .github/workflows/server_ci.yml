@@ -24,6 +24,8 @@ jobs:
         python-version: [3.6, 3.7, 3.8]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
+    env: 
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -39,10 +41,6 @@ jobs:
         
       - name: Lint files
         run: pylint ./*.py
-        
-      - name: setup env variable
-        env: 
-            DATABASE_URL: ${{ secrets.DATABASE_URL }}
         
       - name: Run tests
         run: python -m unittest
