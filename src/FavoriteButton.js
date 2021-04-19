@@ -1,10 +1,7 @@
 import React, {useState} from "react";
-
-import YouTube from "react-youtube"
-import movieTrailer from "movie-trailer"
 import changeFavorite from "./App.js"
 
-function FavoriteButton({email, media}) {
+function FavoriteButton({userEmail, media}) {
     function isFavorite(email, media){
       email = encodeURIComponent(email);
       media = encodeURIComponent(media);
@@ -37,11 +34,11 @@ function FavoriteButton({email, media}) {
        
     }
 
-    console.log("Email " + email + " Media " + media);
+    console.log("Email " + userEmail + " Media " + media);
     
     return (
         <div>
-           
+         
         </div>
     )
 }

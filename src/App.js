@@ -99,6 +99,7 @@ export function App() {
   const [appShown, setShown] = useState(false);
   const [userImage, setUserImage] = useState('');
   const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   
   function searchChangeHandler(event){
     const searchValue = event.target.value;
@@ -125,6 +126,7 @@ export function App() {
   const grabUserInfo = (data) => { 
     setUserName(data.name);
     setUserImage(data.imageUrl);
+    setUserEmail(data.email);
     userLoggedIn(data.email);
     console.log("User email: "+data.email);
   };
@@ -152,13 +154,13 @@ export function App() {
           fetchURL={"/search/multi?api_key="+API_KEY+"&language=en-US&query="+searchTerm+"&page=1&include_adult=false"}
           isLargeRow/>)
           : null}
-          <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} isLargeRow/>
-          <RowRetry title="Trending Now" fetchURL={requests.fetchTrending}/>
-          <RowRetry title="Top Rated" fetchURL={requests.fetchTopRated}/>
-          <RowRetry title="Action Movies" fetchURL={requests.fetchActionMovies}/>
-          <RowRetry title="Comedy Movies" fetchURL={requests.fetchComedyMovies}/>
-          <RowRetry title="Horror Movies" fetchURL={requests.fetchHorrorMovies}/>
-          <RowRetry title="Documentaries" fetchURL={requests.fetchDocumentaries}/>
+          <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} userEmail={userEmail} isLargeRow/>
+          <RowRetry title="Trending Now" fetchURL={requests.fetchTrending} userEmail={userEmail}/>
+          <RowRetry title="Top Rated" fetchURL={requests.fetchTopRated} userEmail={userEmail}/>
+          <RowRetry title="Action Movies" fetchURL={requests.fetchActionMovies} userEmail={userEmail}/>
+          <RowRetry title="Comedy Movies" fetchURL={requests.fetchComedyMovies} userEmail={userEmail}/>
+          <RowRetry title="Horror Movies" fetchURL={requests.fetchHorrorMovies} userEmail={userEmail}/>
+          <RowRetry title="Documentaries" fetchURL={requests.fetchDocumentaries} userEmail={userEmail}/>
       </div>
     ) : (
           <div>
