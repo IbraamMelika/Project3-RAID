@@ -4,7 +4,6 @@ import unittest
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-sys.path.append(os.path.abspath('../'))
 import models
 import app
 
