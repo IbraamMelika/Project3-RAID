@@ -20,7 +20,8 @@ DATABASE_URL='url goes here'
 in a .env file in the same folder as app.py
 
 ### Google Login
-In a .env add variable REACT_APP_GOOGLE_CLIENT_KEY='YOURKEY'
+1. In a .env add variable REACT_APP_GOOGLE_CLIENT_KEY='YOURKEY'
+2. Try clearing cache if google login fails
 
 ### Python Linting
 
