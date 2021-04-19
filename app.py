@@ -174,7 +174,7 @@ def endpoint_person():
 def endpoint_favorite():
     '''Endpoint for Favorite class interactions.'''
 
-    print("Favorite Endpoint Reached")
+    print("----------\nFavorite Endpoint Reached")
     print(request)
 
     if request.method == 'GET':

@@ -6,7 +6,7 @@ import './Row.css'
 
 const base_url = "https://image.tmdb.org/t/p/original/";
 
-function RowRetry({ title, fetchURL, isLargeRow }) {
+function RowRetry({ title, fetchURL, isLargeRow, userEmail }) {
   const [movies, setMovies] = useState([]);
   const [Clicker, setClicker] = useState("");
   const [clickedMovie, setClickedMovie] = useState("");
@@ -52,7 +52,7 @@ function RowRetry({ title, fetchURL, isLargeRow }) {
       </div>
 
       <div className="page_contents">
-        {Clicker && <Page name={clickedMovie}/>}
+        {Clicker && <Page name={clickedMovie} userEmail={userEmail}/>}
       </div>
     
 
