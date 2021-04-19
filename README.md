@@ -3,7 +3,7 @@ Sprint1 Heroku URL: https://thawing-meadow-87139.herokuapp.com/
 
 Sprint2 Heroku URL: https://ancient-coast-64911.herokuapp.com/
 
-### Loggin In
+### Logging In
 If the Google login does not work, try clearing your cached images and files in your browser settings
 
 ### Requirements
