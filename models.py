@@ -74,3 +74,23 @@ def define_watchlist_class(database):
                 self.email, self.listName, self.dateCreated)
 
     return Watchlist
+
+def define_watchitem_class(database):
+    '''Returns class definition of Watchitem model using database instance.'''
+
+    class Watchitem(database.Model):
+        '''Class for Watchlist data model'''
+
+        email = database.Column(
+            database.String, database.ForeignKey('person.email'), primary_key=True)
+        listName = database.Column(
+            database.String(80), database.ForeignKey('watchlist.listName'), primary_key=True)
+        media = database.Column(database.String(80), nullable=False, primary_key=True)
+        dateAdded = database.Column(
+            database.DateTime(timezone=True), default=func.now())
+
+        def __repr__(self):
+            return '<Watchitem Instance: email {} listName {} media {} dateAdded {}>'.format(
+                self.email, self.listName, self.media, self.dateAdded)
+
+    return Watchitem

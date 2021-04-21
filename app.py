@@ -112,27 +112,27 @@ def get_comments_for_media(media):
 
     return Comment.query.filter_by(media=media).order_by(Comment.timestamp).all()
 
-def is_watchlist(email, listName):
+def is_watchlist(email, list_name):
     ''' Returns whether the user has a list with that name '''
-    
-    query = Watchlist.query.filter_by(email=email, listName=listName).first()
+
+    query = Watchlist.query.filter_by(email=email, listName=list_name).first()
     if query is None:
         return False
     return True
 
-def add_watchlist(email, listName):
+def add_watchlist(email, list_name):
     ''' Creates new watchlist. Makes no assumptions about existing lists '''
-    
-    new_list = Watchlist(email=email, listName=listName)
+
+    new_list = Watchlist(email=email, listName=list_name)
     DB.session.add(new_list)
     DB.session.commit()
-    
-def remove_watchlist(email, listName):
+
+def remove_watchlist(email, list_name):
     '''Remove a watchlist. Needs to be refactored for cascade delete'''
 
-    Watchlist.query.filter_by(email=email, listName=listName).delete()
+    Watchlist.query.filter_by(email=email, listName=list_name).delete()
     DB.session.commit()
-    
+
 def get_all_watchlists(email):
     ''' Get all watchlists for a person '''
     all_lists = Watchlist.query.filter_by(email=email).all()
