@@ -65,7 +65,6 @@ def add_person(email, username=None):
     new_user = Person(email=email, username=username)
     DB.session.add(new_user)
     DB.session.commit()
-    return get_all_users()
 
 def get_all_users():
     '''Returns all person from the Database.'''
@@ -89,14 +88,12 @@ def add_favorite(email, media):
     new_fav = Favorite(email=email, media=media)
     DB.session.add(new_fav)
     DB.session.commit()
-    return get_all_favorites(email)
 
 def remove_favorite(email, media):
     '''Unfavorite given media for given user.'''
 
     Favorite.query.filter_by(email=email, media=media).delete()
     DB.session.commit()
-    return get_all_favorites(email)
 
 def get_all_favorites(email):
     '''Returns all favorites for that person.'''
@@ -115,6 +112,29 @@ def get_comments_for_media(media):
 
     return Comment.query.filter_by(media=media).order_by(Comment.timestamp).all()
 
+def is_on_watchlist(email, media):
+    ''' Returns whether the given media is on the watchlist for that person'''
+    query = Watch.query.filter_by(email=email, media=media).first()
+    if query is None:
+        return False
+    return True
+
+def add_to_watchlist(email, media):
+    ''' Adds media to watchlist '''
+
+    new_watch = Watch(email=email, media=media)
+    DB.session.add(new_watch)
+    DB.session.commit()
+
+def remove_from_watchlist(email, media):
+    ''' Remove media from person's watchlist'''
+    Watch.query.filter_by(email=email, media=media).delete()
+    DB.session.commit()
+
+def get_watchlist(email):
+    '''Get the watchlist for a person'''
+    all_watch = Watch.query.filter_by(email=email).all()
+    return all_watch
 
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
@@ -210,7 +230,6 @@ def endpoint_favorite():
                 return {'success': True}
 
     return Response("Error: Tried to set favorite status to what it already was", status=400)
-
 
 if __name__ == "__main__":
     APP.run(
