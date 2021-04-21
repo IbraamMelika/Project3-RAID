@@ -57,26 +57,40 @@ def define_comment_class(database):
 
     return Comment
 
-def define_watch_class(database):
-    ''' Returns class definition of Watch model using database instance.'''
+def define_watchlist_class(database):
+    '''Returns class definition of Watchlist model using database instance.'''
 
-    class Watch(database.Model):
-        '''Class for Watch data model'''
+    class Watchlist(database.Model):
+        '''Class for Watchlist data model'''
 
         email = database.Column(
             database.String, database.ForeignKey('person.email'), primary_key=True)
-        media = database.Column(database.String(80), nullable=False, primary_key=True)
-        timeAdded = database.Column(
+        listName = database.Column(database.String(80), nullable=False, primary_key=True)
+        dateCreated = database.Column(
             database.DateTime(timezone=True), default=func.now())
-        season = database.Column(database.Integer, default=0)
-        episode = database.Column(database.Integer, default=0)
-        hour = database.Column(database.Integer, default=0)
-        minute = database.Column(database.Integer, default=0)
 
         def __repr__(self):
-            return '<Watch Instance: email {} media {} timeAdded {}\
-            season {} episode {} hour {} minute {}>'.format(
-                self.email, self.media, self.timeAdded,
-                self.season, self.episode, self.hour, self.minute)
+            return '<Comment Instance: email {} listName {} dateCreated {}>'.format(
+                self.email, self.listName, self.dateCreated)
 
-    return Watch
+    return Watchlist
+
+
+# def define_watch_class(database):
+#     ''' Returns class definition of Watch model using database instance.'''
+
+#     class Watch(database.Model):
+#         '''Class for Watch data model'''
+
+#         email = database.Column(
+#             database.String, database.ForeignKey('person.email'), primary_key=True)
+#         media = database.Column(database.String(80), nullable=False, primary_key=True)
+#         listName = database.Column(database.String(80), nullable=False, primary_key=True)
+#         timeAdded = database.Column(
+#             database.DateTime(timezone=True), default=func.now())
+
+#         def __repr__(self):
+#             return '<Watch Instance: email {} media {} listName {} timeAdded {}>'.format(
+#                 self.email, self.media, self.listName, self.timeAdded)
+
+#     return Watch
