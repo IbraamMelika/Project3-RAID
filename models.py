@@ -91,6 +91,7 @@ def define_watchitem_class(database, watchlist):
         dateAdded = database.Column(
             database.DateTime(timezone=True), default=func.now())
 
+        # Define foreign key on email and list name AS A PAIR, not individually
         __table_args__ = (
             ForeignKeyConstraint([email, listName], [watchlist.email, watchlist.listName]), {})
 
