@@ -1,4 +1,10 @@
-Current Heroku URL: https://thawing-meadow-87139.herokuapp.com/
+Sprint1 Heroku URL: https://thawing-meadow-87139.herokuapp.com/
+
+
+Sprint2 Heroku URL: https://ancient-coast-64911.herokuapp.com/
+
+### Logging In
+If the Google login does not work, try clearing your cached images and files in your browser settings
 
 ### Requirements
 1. npm install axios
@@ -17,7 +23,8 @@ DATABASE_URL='url goes here'
 in a .env file in the same folder as app.py
 
 ### Google Login
-In a .env add variable REACT_APP_GOOGLE_CLIENT_KEY='YOURKEY'
+1. In a .env add variable REACT_APP_GOOGLE_CLIENT_KEY='YOURKEY'
+2. Try clearing cache if google login fails
 
 ### Python Linting
 

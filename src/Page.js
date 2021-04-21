@@ -1,10 +1,9 @@
 import React, {useState} from "react";
-
+import FavoriteButton from "./FavoriteButton.js"
 import YouTube from "react-youtube"
 import movieTrailer from "movie-trailer"
 
-function Page({name}) {
-
+function Page({name, userEmail}) {
     const [trailerURL, setTrailerURL] = useState("");
 
     //const theName = {name}
@@ -21,6 +20,7 @@ function Page({name}) {
     var nameStringy = JSON.stringify({name})
     var obj = JSON.parse(nameStringy)
     var values = Object.values(obj)
+    //values [0] is the name of the movie
     
 
     handleClick(values[0])
@@ -41,6 +41,8 @@ function Page({name}) {
             <h1>
             This is the page for {name}
             </h1>
+            
+            <FavoriteButton userEmail={userEmail} media={name}/>
             
             <YouTube videoId={trailerURL} opts={opts}/>
         </div>
