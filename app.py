@@ -114,7 +114,6 @@ def get_comments_for_media(media):
 
     return Comment.query.filter_by(media=media).order_by(Comment.timestamp).all()
 
-
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
 def index(filename):

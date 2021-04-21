@@ -32,3 +32,13 @@ The warning "invalid-envvar-default" has been disabled.
 The warning too-few-public-methods has been disabled.
 The warning no-members has been disabled since it would return false positives
 
+### Server Unit Testing
+
+In case database is wiped, run the following code somewhere in app.py to reinitialize the database to pass the unit tests
+test_em = [('naman@stuff.com', 'nam61'), ('user1@stuff.com', 'use200'), ('ranfis@stuff.com', 'ran200'), ('Dre@stuff.com', 'Dre200'), ('Ibrahim@stuff.com', 'Ibr200'), ('newuser@network.com', 'DefaultUsername'), ('test@network.com', 'tes845'), ('andre07087@gmail.com', 'and114') ]
+
+for pair in test_em:
+    email = pair[0]
+    username = pair[1]
+    if not is_person(email):
+        add_person(email, username)
