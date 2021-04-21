@@ -70,27 +70,7 @@ def define_watchlist_class(database):
             database.DateTime(timezone=True), default=func.now())
 
         def __repr__(self):
-            return '<Comment Instance: email {} listName {} dateCreated {}>'.format(
+            return '<Watchlist Instance: email {} listName {} dateCreated {}>'.format(
                 self.email, self.listName, self.dateCreated)
 
     return Watchlist
-
-
-# def define_watch_class(database):
-#     ''' Returns class definition of Watch model using database instance.'''
-
-#     class Watch(database.Model):
-#         '''Class for Watch data model'''
-
-#         email = database.Column(
-#             database.String, database.ForeignKey('person.email'), primary_key=True)
-#         media = database.Column(database.String(80), nullable=False, primary_key=True)
-#         listName = database.Column(database.String(80), nullable=False, primary_key=True)
-#         timeAdded = database.Column(
-#             database.DateTime(timezone=True), default=func.now())
-
-#         def __repr__(self):
-#             return '<Watch Instance: email {} media {} listName {} timeAdded {}>'.format(
-#                 self.email, self.media, self.listName, self.timeAdded)
-
-#     return Watch

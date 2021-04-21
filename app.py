@@ -27,7 +27,7 @@ DB = SQLAlchemy(APP)
 Person = models.define_person_class(DB)
 Favorite = models.define_favorite_class(DB)
 Comment = models.define_comment_class(DB)
-Watch = models.define_watch_class(DB)
+Watchlist = models.define_watchlist_class(DB)
 DB.create_all()
 
 CORS_VAR = CORS(APP, resources={r"/*": {"origins": "*"}})
@@ -112,29 +112,32 @@ def get_comments_for_media(media):
 
     return Comment.query.filter_by(media=media).order_by(Comment.timestamp).all()
 
-def is_on_watchlist(email, media):
-    ''' Returns whether the given media is on the watchlist for that person'''
-    query = Watch.query.filter_by(email=email, media=media).first()
+def is_watchlist(email, listName):
+    ''' Returns whether the user has a list with that name '''
+    
+    query = Watchlist.query.filter_by(email=email, listName=listName).first()
     if query is None:
         return False
     return True
 
-def add_to_watchlist(email, media):
-    ''' Adds media to watchlist '''
-
-    new_watch = Watch(email=email, media=media)
-    DB.session.add(new_watch)
+def add_watchlist(email, listName):
+    ''' Creates new watchlist. Makes no assumptions about existing lists '''
+    
+    new_list = Watchlist(email=email, listName=listName)
+    DB.session.add(new_list)
     DB.session.commit()
+    
+def remove_watchlist(email, listName):
+    '''Remove a watchlist. Needs to be refactored for cascade delete'''
 
-def remove_from_watchlist(email, media):
-    ''' Remove media from person's watchlist'''
-    Watch.query.filter_by(email=email, media=media).delete()
+    Watchlist.query.filter_by(email=email, listName=listName).delete()
     DB.session.commit()
+    
+def get_all_watchlists(email):
+    ''' Get all watchlists for a person '''
+    all_lists = Watchlist.query.filter_by(email=email).all()
+    return all_lists
 
-def get_watchlist(email):
-    '''Get the watchlist for a person'''
-    all_watch = Watch.query.filter_by(email=email).all()
-    return all_watch
 
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
