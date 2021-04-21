@@ -27,6 +27,7 @@ DB = SQLAlchemy(APP)
 Person = models.define_person_class(DB)
 Favorite = models.define_favorite_class(DB)
 Comment = models.define_comment_class(DB)
+Watch = models.define_watch_class(DB)
 DB.create_all()
 
 CORS_VAR = CORS(APP, resources={r"/*": {"origins": "*"}})
@@ -114,6 +115,7 @@ def get_comments_for_media(media):
 
     return Comment.query.filter_by(media=media).order_by(Comment.timestamp).all()
 
+
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
 def index(filename):
@@ -131,7 +133,7 @@ def test_endpoint():
 def endpoint_person():
     '''Endpoint for Person class interactions.'''
 
-    print("Person Endpoint Reached")
+    print("----------\nPerson Endpoint Reached")
     print(request)
 
     if request.method == 'GET':

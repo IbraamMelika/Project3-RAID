@@ -56,4 +56,21 @@ def define_comment_class(database):
                 self.email, self.media, self.timestamp)
 
     return Comment
-    
+
+def define_watch_class(database):
+    ''' Returns class definition of Watch model using database instance.'''
+
+    class Watch(database.Model):
+        '''Class for Watch data model'''
+
+        email = database.Column(
+            database.String, database.ForeignKey('person.email'), primary_key=True)
+        media = database.Column(database.String(80), nullable=False, primary_key=True)
+        timestamp = database.Column(
+            database.DateTime(timezone=True), default=func.now())
+        season = database.Column(database.Integer, default=0)
+        episode = database.Column(database.Integer, default=0)
+        hour = database.Column(database.Integer, default=0)
+        minute = database.Column(database.Integer, default=0)
+
+    return Watch
