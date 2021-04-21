@@ -66,11 +66,17 @@ def define_watch_class(database):
         email = database.Column(
             database.String, database.ForeignKey('person.email'), primary_key=True)
         media = database.Column(database.String(80), nullable=False, primary_key=True)
-        timestamp = database.Column(
+        timeAdded = database.Column(
             database.DateTime(timezone=True), default=func.now())
         season = database.Column(database.Integer, default=0)
         episode = database.Column(database.Integer, default=0)
         hour = database.Column(database.Integer, default=0)
         minute = database.Column(database.Integer, default=0)
+
+        def __repr__(self):
+            return '<Watch Instance: email {} media {} timeAdded {}\
+            season {} episode {} hour {} minute {}>'.format(
+                self.email, self.media, self.timeAdded,
+                self.season, self.episode, self.hour, self.minute)
 
     return Watch
