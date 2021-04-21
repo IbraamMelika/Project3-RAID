@@ -6,6 +6,7 @@ Person = models.define_person_class(DB) where DB is your database created from S
 '''
 
 from sqlalchemy.sql import func
+from sqlalchemy import ForeignKeyConstraint
 
 def define_person_class(database):
     '''Returns class definition using database instance.'''
@@ -75,19 +76,23 @@ def define_watchlist_class(database):
 
     return Watchlist
 
-def define_watchitem_class(database):
-    '''Returns class definition of Watchitem model using database instance.'''
+def define_watchitem_class(database, watchlist):
+    '''Returns class definition of Watchitem model using database instance.
+    Due to a depedency, it needs the Watchlist class itself as a parameter'''
 
     class Watchitem(database.Model):
         '''Class for Watchlist data model'''
 
         email = database.Column(
-            database.String, database.ForeignKey('person.email'), primary_key=True)
+            database.String, primary_key=True)
         listName = database.Column(
-            database.String(80), database.ForeignKey('watchlist.listName'), primary_key=True)
+            database.String(80), primary_key=True)
         media = database.Column(database.String(80), nullable=False, primary_key=True)
         dateAdded = database.Column(
             database.DateTime(timezone=True), default=func.now())
+
+        __table_args__ = (
+            ForeignKeyConstraint([email, listName], [watchlist.email, watchlist.listName]), {})
 
         def __repr__(self):
             return '<Watchitem Instance: email {} listName {} media {} dateAdded {}>'.format(

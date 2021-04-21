@@ -28,6 +28,7 @@ Person = models.define_person_class(DB)
 Favorite = models.define_favorite_class(DB)
 Comment = models.define_comment_class(DB)
 Watchlist = models.define_watchlist_class(DB)
+Watchitem = models.define_watchitem_class(DB, Watchlist)
 DB.create_all()
 
 CORS_VAR = CORS(APP, resources={r"/*": {"origins": "*"}})
@@ -129,14 +130,47 @@ def add_watchlist(email, list_name):
 
 def remove_watchlist(email, list_name):
     '''Remove a watchlist. Needs to be refactored for cascade delete'''
-
+    remove_all_watchitems_from_watchlist(email, list_name)
     Watchlist.query.filter_by(email=email, listName=list_name).delete()
     DB.session.commit()
 
 def get_all_watchlists(email):
     ''' Get all watchlists for a person '''
+
     all_lists = Watchlist.query.filter_by(email=email).all()
     return all_lists
+
+def is_watchitem_on_watchlist(email, list_name, media):
+    ''' Returns whether given item is in the watch list list_name for user '''
+
+    query = Watchitem.query.filter_by(email=email, listName=list_name, media=media).first()
+    if query is None:
+        return False
+    return True
+
+def add_watchitem_to_watchlist(email, list_name, media):
+    ''' Add media to watchlist for user '''
+    new_item = Watchitem(email=email, listName=list_name, media=media)
+    DB.session.add(new_item)
+    DB.session.commit()
+
+def remove_watchitem_from_watchlist(email, list_name, media):
+    ''' Remove item from watchlist for user '''
+
+    Watchitem.query.filter_by(email=email, listName=list_name, media=media).delete()
+    DB.session.commit()
+
+def remove_all_watchitems_from_watchlist(email, list_name):
+    ''' Remove all items from a list '''
+
+    Watchitem.query.filter_by(email=email, listName=list_name).delete()
+    DB.session.commit()
+
+def get_all_watchitems_on_watchlist(email, list_name):
+    ''' Get all watchitems on a watchlist '''
+
+    all_items = Watchitem.query.filter_by(email=email, listName=list_name).all()
+    return all_items
 
 
 @APP.route('/', defaults={"filename": "index.html"})
