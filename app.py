@@ -88,14 +88,12 @@ def add_favorite(email, media):
     new_fav = Favorite(email=email, media=media)
     DB.session.add(new_fav)
     DB.session.commit()
-    return get_all_favorites(email)
 
 def remove_favorite(email, media):
     '''Unfavorite given media for given user.'''
 
     Favorite.query.filter_by(email=email, media=media).delete()
     DB.session.commit()
-    return get_all_favorites(email)
 
 def get_all_favorites(email):
     '''Returns all favorites for that person.'''
