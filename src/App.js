@@ -128,6 +128,29 @@ function getAllWatchlists(email){
       });
 }
 
+function addOrRemoveWatchlist(email, listName, addOrRemove){
+  /* willBeFavorite is a boolean value */
+  
+  email = encodeURIComponent(email);
+  listName = encodeURIComponent(listName);
+  
+  const url = "/api/v1/watchlist";
+  const data = JSON.stringify({'email': email, 'listName': listName, 'addOrRemove': addOrRemove});
+  
+  fetch(url, {
+      method: 'POST',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+         body: data
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData);
+      });
+}
+
 export function App() {
   const [searchTerm, setsearchTerm] = useState(" ");
   const [beingSearched, setBeingSearched] = useState(false);

@@ -129,7 +129,7 @@ def add_watchlist(email, list_name):
     DB.session.commit()
 
 def remove_watchlist(email, list_name):
-    '''Remove a watchlist. Needs to be refactored for cascade delete'''
+    '''Remove a watchlist'''
     remove_all_watchitems_from_watchlist(email, list_name)
     Watchlist.query.filter_by(email=email, listName=list_name).delete()
     DB.session.commit()
@@ -292,7 +292,23 @@ def endpoint_watchlist():
             
     elif request.method == 'POST':
         # Add or remove a watchlist for a user
-        pass
+        print("Got POST from Watchlist")
+        request_data = request.get_json()
+        email = unquote(request_data['email'])
+        list_name = unquote(request_data['listName'])
+        add_or_remove = request_data['addOrRemove'] # if TRUE, add, if FALSE, delete
+        
+        if add_or_remove and not is_watchlist(email, list_name):
+            add_watchlist(email, list_name)
+            print("WATCHLISTS ", get_all_watchlists(email))
+            return {'success': True}
+        elif not add_or_remove and is_watchlist(email, list_name):
+            remove_watchlist(email, list_name)
+            print("WATCHLISTS ", get_all_watchlists(email))
+            return {'success': True}
+        
+        print("POST error")
+        return Response("Mismatch between adding/deleting and whether it already exists or not.", status=400)
 
 if __name__ == "__main__":
     APP.run(
