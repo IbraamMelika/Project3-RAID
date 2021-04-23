@@ -241,12 +241,15 @@ def endpoint_favorite():
         email = unquote(request.args.get('email', ''))
         media = unquote(request.args.get('media', ''))
 
-        if email != '' and media != '':
+        if email == '':
+            return Response("Failed to provide email", status=400)
+
+        if media != '':
             return {'isFavorite': is_favorite(email, media)}
-        elif email != '' and media == '':
-            all_favs = get_all_favorites(email)
-            name_list = [fav.media for fav in all_favs]
-            return {'allFavorites': name_list}
+
+        all_favs = get_all_favorites(email)
+        name_list = [fav.media for fav in all_favs]
+        return {'allFavorites': name_list}
 
     elif request.method == 'POST':
         # Change whether or not something is favorited
@@ -269,7 +272,7 @@ def endpoint_favorite():
                 remove_favorite(email, media)
                 return {'success': True}
 
-    return Response("Error: Tried to set favorite status to what it already was", status=400)
+    return Response("Unknown Error", status=400)
 
 @APP.route('/api/v1/watchlist', methods=['GET', 'POST'])
 def endpoint_watchlist():
@@ -277,19 +280,19 @@ def endpoint_watchlist():
 
     print("----------\nWatchlist Endpoint Reached")
     print(request)
-    
+
     if request.method == 'GET':
         # Get existing watchlists for a user
         print("Got GET from Watchlist")
         email = unquote(request.args.get('email', ''))
 
         if email != '':
-            watchLists = get_all_watchlists(email)
-            nameList = [thing.listName for thing in watchLists]
-            return {'watchLists': nameList}
+            watch_lists = get_all_watchlists(email)
+            name_list = [thing.listName for thing in watch_lists]
+            return {'watchLists': name_list}
 
         return Response("Email argument empty or invalid", status=400)
-            
+
     elif request.method == 'POST':
         # Add or remove a watchlist for a user
         print("Got POST from Watchlist")
@@ -297,18 +300,19 @@ def endpoint_watchlist():
         email = unquote(request_data['email'])
         list_name = unquote(request_data['listName'])
         add_or_remove = request_data['addOrRemove'] # if TRUE, add, if FALSE, delete
-        
+
         if add_or_remove and not is_watchlist(email, list_name):
             add_watchlist(email, list_name)
-            print("WATCHLISTS ", get_all_watchlists(email))
             return {'success': True}
         elif not add_or_remove and is_watchlist(email, list_name):
             remove_watchlist(email, list_name)
-            print("WATCHLISTS ", get_all_watchlists(email))
             return {'success': True}
-        
+
         print("POST error")
-        return Response("Mismatch between adding/deleting and whether it already exists or not.", status=400)
+        return Response(
+            "Mismatch between adding/deleting and whether it already exists or not.", status=400)
+
+    return Response("Unknown Error", status=400)
 
 if __name__ == "__main__":
     APP.run(

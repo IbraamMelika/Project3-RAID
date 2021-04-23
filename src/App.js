@@ -129,7 +129,7 @@ function getAllWatchlists(email){
 }
 
 function addOrRemoveWatchlist(email, listName, addOrRemove){
-  /* willBeFavorite is a boolean value */
+  /* addOrRemove is a boolean value True for add False for remove*/
   
   email = encodeURIComponent(email);
   listName = encodeURIComponent(listName);
