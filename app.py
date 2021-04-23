@@ -316,7 +316,7 @@ def endpoint_watchlist():
 
     return Response("Unknown Error", status=400)
 
-quit()
+
 if __name__ == "__main__":
     APP.run(
         host=os.getenv('IP', '0.0.0.0'),
