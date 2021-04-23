@@ -225,7 +225,6 @@ def endpoint_person():
         add_person(email)
         return {'success': True, 'newUser': True}
 
-
     return Response("Error: Unknown", status=400)
 
 @APP.route('/api/v1/favorite', methods=['GET', 'POST'])
@@ -244,6 +243,10 @@ def endpoint_favorite():
 
         if email != '' and media != '':
             return {'isFavorite': is_favorite(email, media)}
+        elif email != '' and media == '':
+            all_favs = get_all_favorites(email)
+            name_list = [fav.media for fav in all_favs]
+            return {'allFavorites': name_list}
 
     elif request.method == 'POST':
         # Change whether or not something is favorited
@@ -267,6 +270,30 @@ def endpoint_favorite():
                 return {'success': True}
 
     return Response("Error: Tried to set favorite status to what it already was", status=400)
+
+@APP.route('/api/v1/watchlist', methods=['GET', 'POST'])
+def endpoint_watchlist():
+    '''Endpoint for Watchlist class interactions.'''
+
+    print("----------\nWatchlist Endpoint Reached")
+    print(request)
+    
+    if request.method == 'GET':
+        # Get existing watchlists for a user
+        print("Got GET from Watchlist")
+        email = unquote(request.args.get('email', ''))
+
+        if email != '':
+            watchLists = get_all_watchlists(email)
+            nameList = []
+            for thing in watchLists:
+                nameList.append(thing.listName)
+            return {'watchLists': nameList}
+        return Response("Email argument empty or invalid", status=400)
+            
+    elif request.method == 'POST':
+        # Add or remove a watchlist for a user
+        pass
 
 if __name__ == "__main__":
     APP.run(
