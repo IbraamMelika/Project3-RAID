@@ -110,6 +110,24 @@ function getAllFavorites(email){
       });
 }
 
+function getAllWatchlists(email){
+  email = encodeURIComponent(email);
+  const url = "/api/v1/watchlist?email=" + email;
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        const watchLists = responseData.watchLists
+        console.log(watchLists)
+      });
+}
+
 export function App() {
   const [searchTerm, setsearchTerm] = useState(" ");
   const [beingSearched, setBeingSearched] = useState(false);
@@ -147,8 +165,6 @@ export function App() {
     userLoggedIn(data.email);
     console.log("User email: "+data.email);
   };
-  
-  getAllFavorites("ranfis.francisco@gmail.com")
   
   return (
     <div>

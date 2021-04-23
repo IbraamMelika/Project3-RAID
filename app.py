@@ -285,10 +285,9 @@ def endpoint_watchlist():
 
         if email != '':
             watchLists = get_all_watchlists(email)
-            nameList = []
-            for thing in watchLists:
-                nameList.append(thing.listName)
+            nameList = [thing.listName for thing in watchLists]
             return {'watchLists': nameList}
+
         return Response("Email argument empty or invalid", status=400)
             
     elif request.method == 'POST':
