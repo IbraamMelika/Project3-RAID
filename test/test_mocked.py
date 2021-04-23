@@ -141,7 +141,8 @@ class AddPersonTestCase(unittest.TestCase):
                         with patch('app.Person.query') as mocked_query:
                             mocked_query.all = self.mocked_person_query_all
                             # Calling function to test
-                            actual_result = app.add_person(test[KEY_INPUT])
+                            app.add_person(test[KEY_INPUT])
+                            actual_result = app.get_all_users()
                             expected_result = test[KEY_EXPECTED]
                             # Comparing actual and expected output
                             self.assertEqual(len(actual_result[-1].username), len(expected_result[-1]['username']))
