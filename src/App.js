@@ -151,6 +151,25 @@ function addOrRemoveWatchlist(email, listName, addOrRemove){
       });
 }
 
+function getAllWatchitemsOnWatchlist(email, listName){
+  email = encodeURIComponent(email);
+  listName = encodeURIComponent(listName);
+  const url = "/api/v1/watchitem?email=" + email + "&listName=" + listName;
+  
+   fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        const watchItems = responseData.watchItems
+        console.log(watchItems)
+      });
+}
+
 export function App() {
   const [searchTerm, setsearchTerm] = useState(" ");
   const [beingSearched, setBeingSearched] = useState(false);

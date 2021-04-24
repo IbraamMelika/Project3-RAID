@@ -314,6 +314,28 @@ def endpoint_watchlist():
 
     return Response("Unknown Error", status=400)
 
+@APP.route('/api/v1/watchitem', methods=['GET', 'POST'])
+def endpoint_watchitem():
+    ''' Endpoint for Watchitem class interactions '''
+    print("----------\nWatchitem Endpoint Reached")
+    print(request)
+    
+    if request.method == 'GET':
+        # Get existing watchitems on a watchlist for a user
+        print("Got GET from Watchitem")
+        email = unquote(request.args.get('email', ''))
+        list_name = unquote(request.args.get('listName', ''))
+
+        if email == '' or list_name == '':
+            return Response('Failed to pass a parameter', status=400)
+
+        items = get_all_watchitems_on_watchlist(email, list_name)
+        return_item = {"watchItems" : [{'media': item.media} for item in items]}
+        
+        return return_item
+
+    elif request.method == 'POST':
+         print("Got POST from Watchitem")
 
 if __name__ == "__main__":
     APP.run(
