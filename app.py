@@ -273,23 +273,26 @@ def endpoint_favorite():
                 return {'success': True}
 
     return Response("Unknown Error", status=400)
-    
+
 @APP.route('/api/v1/comment', methods=['GET', 'POST'])
 def endpoint_comment():
     '''Endpoint for Comment class interactions.'''
 
     print("----------\nComment Endpoint Reached")
     print(request)
-    
+
     if request.method == 'GET':
         print("Got GET from Comment")
         media = unquote(request.args.get('media', ''))
 
         if media == '':
             return Response("Media argument empty or invalid", status=400)
-            
+
         all_comments = get_comments_for_media(media)
-        return_list = {"comments": [{'message' : comment.message, "email": comment.email, "timestamp": comment.timestamp} for comment in all_comments]}
+        return_list = {"comments": \
+        [{'message' : comment.message, "email": comment.email, "timestamp": comment.timestamp}\
+        for comment in all_comments]}
+
         return return_list
 
     elif request.method == 'POST':
@@ -298,9 +301,11 @@ def endpoint_comment():
         email = unquote(request_data['email'])
         media = unquote(request_data['media'])
         message = unquote(request_data['message'])
-        
+
         add_comment(email, media, message)
-        return {'success': True} 
+        return {'success': True}
+
+    return Response("Unknown Error", status=400)
 
 @APP.route('/api/v1/watchlist', methods=['GET', 'POST'])
 def endpoint_watchlist():
@@ -316,7 +321,10 @@ def endpoint_watchlist():
 
         if email != '':
             watch_lists = get_all_watchlists(email)
-            name_list = {"watchlists": [{"listName": thing.listName, "dateCreated": thing.dateCreated} for thing in watch_lists]}
+            name_list = {"watchlists": \
+            [{"listName": thing.listName, "dateCreated": thing.dateCreated}\
+            for thing in watch_lists]}
+
             return {'watchLists': name_list}
 
         return Response("Email argument empty or invalid", status=400)
@@ -347,7 +355,7 @@ def endpoint_watchitem():
     ''' Endpoint for Watchitem class interactions '''
     print("----------\nWatchitem Endpoint Reached")
     print(request)
-    
+
     if request.method == 'GET':
         # Get existing watchitems on a watchlist for a user
         print("Got GET from Watchitem")
@@ -358,8 +366,9 @@ def endpoint_watchitem():
             return Response('Failed to pass a parameter', status=400)
 
         items = get_all_watchitems_on_watchlist(email, list_name)
-        return_item = {"watchItems" : [{'media': item.media, 'dateAdded': item.dateAdded} for item in items]}
-        
+        return_item = {"watchItems" : \
+        [{'media': item.media, 'dateAdded': item.dateAdded} for item in items]}
+
         return return_item
 
     elif request.method == 'POST':
@@ -380,6 +389,8 @@ def endpoint_watchitem():
         print("POST error")
         return Response(
             "Mismatch between adding/deleting and whether it already exists or not.", status=400)
+
+    return Response("Unknown Error", status=400)
 
 if __name__ == "__main__":
     APP.run(
