@@ -289,11 +289,18 @@ def endpoint_comment():
             return Response("Media argument empty or invalid", status=400)
             
         all_comments = get_comments_for_media(media)
-        return_list = {"comments": [{'message' : comment.message, "email": comment.email, "timezone": comment.timestamp} for comment in all_comments]}
+        return_list = {"comments": [{'message' : comment.message, "email": comment.email, "timestamp": comment.timestamp} for comment in all_comments]}
         return return_list
 
     elif request.method == 'POST':
-        pass
+        print("Got POST from Comment")
+        request_data = request.get_json()
+        email = unquote(request_data['email'])
+        media = unquote(request_data['media'])
+        message = unquote(request_data['message'])
+        
+        add_comment(email, media, message)
+        return {'success': True} 
 
 @APP.route('/api/v1/watchlist', methods=['GET', 'POST'])
 def endpoint_watchlist():

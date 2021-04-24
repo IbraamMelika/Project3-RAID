@@ -123,6 +123,7 @@ function getAllWatchlists(email){
      .then(response => {
         return response.json();
       }).then(responseData => {
+        // can loop through this list and get .listName, .dateCreated
         const watchLists = responseData.watchLists
         console.log(watchLists)
       });
@@ -141,8 +142,31 @@ function getAllComments(media){
      .then(response => {
         return response.json();
       }).then(responseData => {
+        // can loop through this list and get .email, .message, .timestamp
         const comments = responseData.comments
         console.log(comments)
+      });
+}
+
+function addComment(email, media, message){
+  email = encodeURIComponent(email);
+  media = encodeURIComponent(media);
+  message = encodeURIComponent(message);
+  
+  const url = "/api/v1/comment";
+  const data = JSON.stringify({'email': email, 'media': media, 'message': message});
+  
+  fetch(url, {
+      method: 'POST',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+         body: data
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData);
       });
 }
 
@@ -183,6 +207,7 @@ function getAllWatchitemsOnWatchlist(email, listName){
      .then(response => {
         return response.json();
       }).then(responseData => {
+        // can loop through list and get .media, .dateAdded for each
         const watchItems = responseData.watchItems
         console.log(watchItems)
       });
