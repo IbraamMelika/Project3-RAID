@@ -128,6 +128,24 @@ function getAllWatchlists(email){
       });
 }
 
+function getAllComments(media){
+  media = encodeURIComponent(media);
+  const url = "/api/v1/comment?media=" + media;
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        const comments = responseData.comments
+        console.log(comments)
+      });
+}
+
 function addOrRemoveWatchlist(email, listName, addOrRemove){
   /* addOrRemove is a boolean value True for add False for remove*/
   

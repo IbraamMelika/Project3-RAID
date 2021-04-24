@@ -101,7 +101,7 @@ def get_all_favorites(email):
     all_fav = Favorite.query.filter_by(email=email).all()
     return all_fav
 
-def add_comment(email, message, media):
+def add_comment(email, media, message):
     '''Add a comment. Timestamp automatically generated.'''
 
     new_comment = Comment(email=email, message=message, media=media)
@@ -273,6 +273,27 @@ def endpoint_favorite():
                 return {'success': True}
 
     return Response("Unknown Error", status=400)
+    
+@APP.route('/api/v1/comment', methods=['GET', 'POST'])
+def endpoint_comment():
+    '''Endpoint for Comment class interactions.'''
+
+    print("----------\nComment Endpoint Reached")
+    print(request)
+    
+    if request.method == 'GET':
+        print("Got GET from Comment")
+        media = unquote(request.args.get('media', ''))
+
+        if media == '':
+            return Response("Media argument empty or invalid", status=400)
+            
+        all_comments = get_comments_for_media(media)
+        return_list = {"comments": [{'message' : comment.message, "email": comment.email, "timezone": comment.timestamp} for comment in all_comments]}
+        return return_list
+
+    elif request.method == 'POST':
+        pass
 
 @APP.route('/api/v1/watchlist', methods=['GET', 'POST'])
 def endpoint_watchlist():
@@ -288,7 +309,7 @@ def endpoint_watchlist():
 
         if email != '':
             watch_lists = get_all_watchlists(email)
-            name_list = [thing.listName for thing in watch_lists]
+            name_list = {"watchlists": [{"listName": thing.listName, "dateCreated": thing.dateCreated} for thing in watch_lists]}
             return {'watchLists': name_list}
 
         return Response("Email argument empty or invalid", status=400)
@@ -330,7 +351,7 @@ def endpoint_watchitem():
             return Response('Failed to pass a parameter', status=400)
 
         items = get_all_watchitems_on_watchlist(email, list_name)
-        return_item = {"watchItems" : [{'media': item.media} for item in items]}
+        return_item = {"watchItems" : [{'media': item.media, 'dateAdded': item.dateAdded} for item in items]}
         
         return return_item
 
