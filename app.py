@@ -335,7 +335,23 @@ def endpoint_watchitem():
         return return_item
 
     elif request.method == 'POST':
-         print("Got POST from Watchitem")
+        print("Got POST from Watchitem")
+        request_data = request.get_json()
+        email = unquote(request_data['email'])
+        list_name = unquote(request_data['listName'])
+        media = unquote(request_data['media'])
+        add_or_remove = request_data['addOrRemove'] # if TRUE, add, if FALSE, delete
+
+        if add_or_remove and not is_watchitem_on_watchlist(email, list_name, media):
+            add_watchitem_to_watchlist(email, list_name, media)
+            return {'success': True}
+        elif not add_or_remove and is_watchitem_on_watchlist(email, list_name, media):
+            remove_watchitem_from_watchlist(email, list_name, media)
+            return {'success': True}
+
+        print("POST error")
+        return Response(
+            "Mismatch between adding/deleting and whether it already exists or not.", status=400)
 
 if __name__ == "__main__":
     APP.run(
