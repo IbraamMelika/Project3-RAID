@@ -141,7 +141,8 @@ class AddPersonTestCase(unittest.TestCase):
                         with patch('app.Person.query') as mocked_query:
                             mocked_query.all = self.mocked_person_query_all
                             # Calling function to test
-                            actual_result = app.add_person(test[KEY_INPUT])
+                            app.add_person(test[KEY_INPUT])
+                            actual_result = app.get_all_users()
                             expected_result = test[KEY_EXPECTED]
                             # Comparing actual and expected output
                             self.assertEqual(len(actual_result[-1].username), len(expected_result[-1]['username']))
@@ -261,7 +262,8 @@ class AddFavroiteTestCase(unittest.TestCase):
                     with patch('app.Favorite.query') as mocked_query:
                         mocked_query.filter_by(email = 'user1@stuff.com').all = self.mocked_get_all_favorites
                         # Calling function to test
-                        actual_result = app.add_favorite(test[KEY_INPUT1], test[KEY_INPUT2])
+                        app.add_favorite(test[KEY_INPUT1], test[KEY_INPUT2])
+                        actual_result = app.get_all_favorites(test[KEY_INPUT1])
                         expected_result = test[KEY_EXPECTED]
                         #Comparing actual and expected output
                         self.assertEqual(len(actual_result[-1].media), len(expected_result[-1]['media'][-1]))
@@ -323,7 +325,8 @@ class RemoveFavroiteTestCase(unittest.TestCase):
                         with patch('app.Favorite.query') as mocked_query2:
                             mocked_query2.filter_by(email=email).all = self.mocked_get_all_favorites
                             # Calling function to test
-                            actual_result = app.remove_favorite(test[KEY_INPUT1], test[KEY_INPUT2])
+                            app.remove_favorite(test[KEY_INPUT1], test[KEY_INPUT2])
+                            actual_result = app.get_all_favorites(test[KEY_INPUT1])
                             expected_result = test[KEY_EXPECTED]
                             #Comparing actual and expected output
                             self.assertEqual(len(actual_result[test[KEY_INPUT1]]), len(expected_result[test[KEY_INPUT1]]))
