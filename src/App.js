@@ -93,6 +93,150 @@ function changeFavorite(email, media, willBeFavorite){
       });
 }
 
+function getAllFavorites(email){
+  email = encodeURIComponent(email);
+  const url = "/api/v1/favorite?email=" + email;
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        const favoritesList = responseData.allFavorites
+      });
+}
+
+function getAllWatchlists(email){
+  email = encodeURIComponent(email);
+  const url = "/api/v1/watchlist?email=" + email;
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        // can loop through this list and get .listName, .dateCreated
+        const watchLists = responseData.watchLists
+        console.log(watchLists)
+      });
+}
+
+function getAllComments(media){
+  media = encodeURIComponent(media);
+  const url = "/api/v1/comment?media=" + media;
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        // can loop through this list and get .email, .message, .timestamp
+        const comments = responseData.comments
+        console.log(comments)
+      });
+}
+
+function addComment(email, media, message){
+  email = encodeURIComponent(email);
+  media = encodeURIComponent(media);
+  message = encodeURIComponent(message);
+  
+  const url = "/api/v1/comment";
+  const data = JSON.stringify({'email': email, 'media': media, 'message': message});
+  
+  fetch(url, {
+      method: 'POST',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+         body: data
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData);
+      });
+}
+
+function addOrRemoveWatchlist(email, listName, addOrRemove){
+  /* addOrRemove is a boolean value True for add False for remove*/
+  
+  email = encodeURIComponent(email);
+  listName = encodeURIComponent(listName);
+  
+  const url = "/api/v1/watchlist";
+  const data = JSON.stringify({'email': email, 'listName': listName, 'addOrRemove': addOrRemove});
+  
+  fetch(url, {
+      method: 'POST',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+         body: data
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData);
+      });
+}
+
+function getAllWatchitemsOnWatchlist(email, listName){
+  email = encodeURIComponent(email);
+  listName = encodeURIComponent(listName);
+  const url = "/api/v1/watchitem?email=" + email + "&listName=" + listName;
+  
+   fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        // can loop through list and get .media, .dateAdded for each
+        const watchItems = responseData.watchItems
+        console.log(watchItems)
+      });
+}
+
+function addOrRemoveWatchitemFromWatchlist(email, listName, media, addOrRemove){
+  /* addOrRemove is a boolean value True for add False for remove*/
+  
+  email = encodeURIComponent(email);
+  listName = encodeURIComponent(listName);
+  media = encodeURIComponent(media);
+  
+  const url = "/api/v1/watchitem";
+  const data = JSON.stringify({'email': email, 'media': media, 'listName': listName, 'addOrRemove': addOrRemove});
+  
+  fetch(url, {
+      method: 'POST',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+         body: data
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData);
+      });
+}
+
 export function App() {
   const [searchTerm, setsearchTerm] = useState(" ");
   const [beingSearched, setBeingSearched] = useState(false);

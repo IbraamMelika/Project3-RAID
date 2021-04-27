@@ -6,6 +6,7 @@ Person = models.define_person_class(DB) where DB is your database created from S
 '''
 
 from sqlalchemy.sql import func
+from sqlalchemy import ForeignKeyConstraint
 
 def define_person_class(database):
     '''Returns class definition using database instance.'''
@@ -56,4 +57,46 @@ def define_comment_class(database):
                 self.email, self.media, self.timestamp)
 
     return Comment
-    
+
+def define_watchlist_class(database):
+    '''Returns class definition of Watchlist model using database instance.'''
+
+    class Watchlist(database.Model):
+        '''Class for Watchlist data model'''
+
+        email = database.Column(
+            database.String, database.ForeignKey('person.email'), primary_key=True)
+        listName = database.Column(database.String(80), nullable=False, primary_key=True)
+        dateCreated = database.Column(
+            database.DateTime(timezone=True), default=func.now())
+
+        def __repr__(self):
+            return '<Watchlist Instance: email {} listName {} dateCreated {}>'.format(
+                self.email, self.listName, self.dateCreated)
+
+    return Watchlist
+
+def define_watchitem_class(database, watchlist):
+    '''Returns class definition of Watchitem model using database instance.
+    Due to a depedency, it needs the Watchlist class itself as a parameter'''
+
+    class Watchitem(database.Model):
+        '''Class for Watchlist data model'''
+
+        email = database.Column(
+            database.String, primary_key=True)
+        listName = database.Column(
+            database.String(80), primary_key=True)
+        media = database.Column(database.String(80), nullable=False, primary_key=True)
+        dateAdded = database.Column(
+            database.DateTime(timezone=True), default=func.now())
+
+        # Define foreign key on email and list name AS A PAIR, not individually
+        __table_args__ = (
+            ForeignKeyConstraint([email, listName], [watchlist.email, watchlist.listName]), {})
+
+        def __repr__(self):
+            return '<Watchitem Instance: email {} listName {} media {} dateAdded {}>'.format(
+                self.email, self.listName, self.media, self.dateAdded)
+
+    return Watchitem
