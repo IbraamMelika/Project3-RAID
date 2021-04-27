@@ -324,7 +324,6 @@ def endpoint_watchlist():
             name_list = {"watchlists": \
             [{"listName": thing.listName, "dateCreated": thing.dateCreated}\
             for thing in watch_lists]}
-
             return {'watchLists': name_list}
 
         return Response("Email argument empty or invalid", status=400)
@@ -339,6 +338,7 @@ def endpoint_watchlist():
 
         if add_or_remove and not is_watchlist(email, list_name):
             add_watchlist(email, list_name)
+            print('watchLists', get_all_watchlists(email))
             return {'success': True}
         elif not add_or_remove and is_watchlist(email, list_name):
             remove_watchlist(email, list_name)
