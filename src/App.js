@@ -237,6 +237,27 @@ function addOrRemoveWatchitemFromWatchlist(email, listName, media, addOrRemove){
       });
 }
 
+function isWatchitemOnWatchlist(email, listName, media){
+  email = encodeURIComponent(email);
+  listName = encodeURIComponent(listName);
+  media = encodeURIComponent(media);
+  
+  const url = "/api/v1/watchitem?email=" + email + "&media=" + media + "&listName=" + listName;
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         }
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        const isOnWatchlist = responseData.isOnWatchlist;
+        console.log("Is On List: " + isOnWatchlist);
+      });
+}
+
 export function App() {
   const [searchTerm, setsearchTerm] = useState(" ");
   const [beingSearched, setBeingSearched] = useState(false);
