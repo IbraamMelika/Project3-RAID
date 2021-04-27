@@ -27,6 +27,8 @@ DB = SQLAlchemy(APP)
 Person = models.define_person_class(DB)
 Favorite = models.define_favorite_class(DB)
 Comment = models.define_comment_class(DB)
+Watchlist = models.define_watchlist_class(DB)
+Watchitem = models.define_watchitem_class(DB, Watchlist)
 DB.create_all()
 
 CORS_VAR = CORS(APP, resources={r"/*": {"origins": "*"}})
@@ -65,6 +67,13 @@ def add_person(email, username=None):
     DB.session.add(new_user)
     DB.session.commit()
 
+def get_all_users():
+    '''Returns all person from the Database.'''
+    all_people = Person.query.all()
+    users = []
+    for person in all_people:
+        users.append(person)
+    return users
 
 def is_favorite(email, media):
     '''Checks whether the given media is a favorite for that person.'''
@@ -89,10 +98,10 @@ def remove_favorite(email, media):
 
 def get_all_favorites(email):
     '''Returns all favorites for that person.'''
+    all_fav = Favorite.query.filter_by(email=email).all()
+    return all_fav
 
-    return Favorite.query.filter_by(email=email).all()
-
-def add_comment(email, message, media):
+def add_comment(email, media, message):
     '''Add a comment. Timestamp automatically generated.'''
 
     new_comment = Comment(email=email, message=message, media=media)
@@ -103,6 +112,65 @@ def get_comments_for_media(media):
     '''Get all comments for a media, ordered by time.'''
 
     return Comment.query.filter_by(media=media).order_by(Comment.timestamp).all()
+
+def is_watchlist(email, list_name):
+    ''' Returns whether the user has a list with that name '''
+
+    query = Watchlist.query.filter_by(email=email, listName=list_name).first()
+    if query is None:
+        return False
+    return True
+
+def add_watchlist(email, list_name):
+    ''' Creates new watchlist. Makes no assumptions about existing lists '''
+
+    new_list = Watchlist(email=email, listName=list_name)
+    DB.session.add(new_list)
+    DB.session.commit()
+
+def remove_watchlist(email, list_name):
+    '''Remove a watchlist'''
+    remove_all_watchitems_from_watchlist(email, list_name)
+    Watchlist.query.filter_by(email=email, listName=list_name).delete()
+    DB.session.commit()
+
+def get_all_watchlists(email):
+    ''' Get all watchlists for a person '''
+
+    all_lists = Watchlist.query.filter_by(email=email).all()
+    return all_lists
+
+def is_watchitem_on_watchlist(email, list_name, media):
+    ''' Returns whether given item is in the watch list list_name for user '''
+
+    query = Watchitem.query.filter_by(email=email, listName=list_name, media=media).first()
+    if query is None:
+        return False
+    return True
+
+def add_watchitem_to_watchlist(email, list_name, media):
+    ''' Add media to watchlist for user '''
+    new_item = Watchitem(email=email, listName=list_name, media=media)
+    DB.session.add(new_item)
+    DB.session.commit()
+
+def remove_watchitem_from_watchlist(email, list_name, media):
+    ''' Remove item from watchlist for user '''
+
+    Watchitem.query.filter_by(email=email, listName=list_name, media=media).delete()
+    DB.session.commit()
+
+def remove_all_watchitems_from_watchlist(email, list_name):
+    ''' Remove all items from a list '''
+
+    Watchitem.query.filter_by(email=email, listName=list_name).delete()
+    DB.session.commit()
+
+def get_all_watchitems_on_watchlist(email, list_name):
+    ''' Get all watchitems on a watchlist '''
+
+    all_items = Watchitem.query.filter_by(email=email, listName=list_name).all()
+    return all_items
 
 
 @APP.route('/', defaults={"filename": "index.html"})
@@ -122,7 +190,7 @@ def test_endpoint():
 def endpoint_person():
     '''Endpoint for Person class interactions.'''
 
-    print("Person Endpoint Reached")
+    print("----------\nPerson Endpoint Reached")
     print(request)
 
     if request.method == 'GET':
@@ -157,14 +225,13 @@ def endpoint_person():
         add_person(email)
         return {'success': True, 'newUser': True}
 
-
     return Response("Error: Unknown", status=400)
 
 @APP.route('/api/v1/favorite', methods=['GET', 'POST'])
 def endpoint_favorite():
     '''Endpoint for Favorite class interactions.'''
 
-    print("Favorite Endpoint Reached")
+    print("----------\nFavorite Endpoint Reached")
     print(request)
 
     if request.method == 'GET':
@@ -174,8 +241,15 @@ def endpoint_favorite():
         email = unquote(request.args.get('email', ''))
         media = unquote(request.args.get('media', ''))
 
-        if email != '' and media != '':
+        if email == '':
+            return Response("Failed to provide email", status=400)
+
+        if media != '':
             return {'isFavorite': is_favorite(email, media)}
+
+        all_favs = get_all_favorites(email)
+        name_list = [fav.media for fav in all_favs]
+        return {'allFavorites': name_list}
 
     elif request.method == 'POST':
         # Change whether or not something is favorited
@@ -198,8 +272,127 @@ def endpoint_favorite():
                 remove_favorite(email, media)
                 return {'success': True}
 
-    return Response("Error: Tried to set favorite status to what it already was", status=400)
+    return Response("Unknown Error", status=400)
 
+@APP.route('/api/v1/comment', methods=['GET', 'POST'])
+def endpoint_comment():
+    '''Endpoint for Comment class interactions.'''
+
+    print("----------\nComment Endpoint Reached")
+    print(request)
+
+    if request.method == 'GET':
+        print("Got GET from Comment")
+        media = unquote(request.args.get('media', ''))
+
+        if media == '':
+            return Response("Media argument empty or invalid", status=400)
+
+        all_comments = get_comments_for_media(media)
+        return_list = {"comments": \
+        [{'message' : comment.message, "email": comment.email, "timestamp": comment.timestamp}\
+        for comment in all_comments]}
+
+        return return_list
+
+    elif request.method == 'POST':
+        print("Got POST from Comment")
+        request_data = request.get_json()
+        email = unquote(request_data['email'])
+        media = unquote(request_data['media'])
+        message = unquote(request_data['message'])
+
+        add_comment(email, media, message)
+        return {'success': True}
+
+    return Response("Unknown Error", status=400)
+
+@APP.route('/api/v1/watchlist', methods=['GET', 'POST'])
+def endpoint_watchlist():
+    '''Endpoint for Watchlist class interactions.'''
+
+    print("----------\nWatchlist Endpoint Reached")
+    print(request)
+
+    if request.method == 'GET':
+        # Get existing watchlists for a user
+        print("Got GET from Watchlist")
+        email = unquote(request.args.get('email', ''))
+
+        if email != '':
+            watch_lists = get_all_watchlists(email)
+            name_list = {"watchlists": \
+            [{"listName": thing.listName, "dateCreated": thing.dateCreated}\
+            for thing in watch_lists]}
+
+            return {'watchLists': name_list}
+
+        return Response("Email argument empty or invalid", status=400)
+
+    elif request.method == 'POST':
+        # Add or remove a watchlist for a user
+        print("Got POST from Watchlist")
+        request_data = request.get_json()
+        email = unquote(request_data['email'])
+        list_name = unquote(request_data['listName'])
+        add_or_remove = request_data['addOrRemove'] # if TRUE, add, if FALSE, delete
+
+        if add_or_remove and not is_watchlist(email, list_name):
+            add_watchlist(email, list_name)
+            return {'success': True}
+        elif not add_or_remove and is_watchlist(email, list_name):
+            remove_watchlist(email, list_name)
+            return {'success': True}
+
+        print("POST error")
+        return Response(
+            "Mismatch between adding/deleting and whether it already exists or not.", status=400)
+
+    return Response("Unknown Error", status=400)
+
+@APP.route('/api/v1/watchitem', methods=['GET', 'POST'])
+def endpoint_watchitem():
+    ''' Endpoint for Watchitem class interactions '''
+    print("----------\nWatchitem Endpoint Reached")
+    print(request)
+
+    if request.method == 'GET':
+        # Get existing watchitems on a watchlist for a user
+        print("Got GET from Watchitem")
+        email = unquote(request.args.get('email', ''))
+        list_name = unquote(request.args.get('listName', ''))
+        media = unquote(request.args.get('media', ''))
+
+        if email == '' or list_name == '':
+            return Response('Failed to pass a parameter', status=400)
+
+        if media != '':
+            return {'isOnWatchlist': is_watchitem_on_watchlist(email, list_name, media)}
+
+        items = get_all_watchitems_on_watchlist(email, list_name)
+        return_item = {"watchItems" : \
+        [{'media': item.media, 'dateAdded': item.dateAdded} for item in items]}
+
+        return return_item
+
+    elif request.method == 'POST':
+        print("Got POST from Watchitem")
+        request_data = request.get_json()
+        email = unquote(request_data['email'])
+        list_name = unquote(request_data['listName'])
+        media = unquote(request_data['media'])
+        add_or_remove = request_data['addOrRemove'] # if TRUE, add, if FALSE, delete
+
+        if add_or_remove and not is_watchitem_on_watchlist(email, list_name, media):
+            add_watchitem_to_watchlist(email, list_name, media)
+            return {'success': True}
+        elif not add_or_remove and is_watchitem_on_watchlist(email, list_name, media):
+            remove_watchitem_from_watchlist(email, list_name, media)
+            return {'success': True}
+
+        print("POST error")
+
+    return Response("Unknown Error", status=400)
 
 if __name__ == "__main__":
     APP.run(
