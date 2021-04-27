@@ -361,9 +361,13 @@ def endpoint_watchitem():
         print("Got GET from Watchitem")
         email = unquote(request.args.get('email', ''))
         list_name = unquote(request.args.get('listName', ''))
+        media = unquote(request.args.get('media', ''))
 
         if email == '' or list_name == '':
             return Response('Failed to pass a parameter', status=400)
+
+        if media != '':
+            return {'isOnWatchlist': is_watchitem_on_watchlist(email, list_name, media)}
 
         items = get_all_watchitems_on_watchlist(email, list_name)
         return_item = {"watchItems" : \
@@ -387,8 +391,6 @@ def endpoint_watchitem():
             return {'success': True}
 
         print("POST error")
-        return Response(
-            "Mismatch between adding/deleting and whether it already exists or not.", status=400)
 
     return Response("Unknown Error", status=400)
 
