@@ -2,30 +2,9 @@ import React, {useState} from "react";
 
 function WatchlistButton({userEmail, media}) {
     const [isInWatchlistState, setInWatchlistState] = useState(false);
-    const [isGetWacthliststate, setGetWacthliststate] = useState([null]);
+    const [isGetWacthliststate, setGetWacthliststate] = useState(null);
     const listName = "MyMovieList";
     
-    // function getWatchlist(email, listName){
-    //   email = encodeURIComponent(email);
-    //   listName = encodeURIComponent(listName);
-      
-    //   const url = "/api/v1/watchlist?email=" + email;
-      
-    //   fetch(url, {
-    //       method: 'GET',
-    //       headers: {
-    //           'Content-Type': 'application/json'
-    //          }
-    //       })
-    //      .then(response => {
-    //         return response.json();
-    //       }).then(responseData => {
-    //         const isGetWacthliststate = responseData.isGetWacthliststate;
-    //         // Here save whether or not this thing is favorited to the state
-    //         setGetWacthliststate(isGetWacthliststate);
-    //         console.log("Is Ge tWacth liststate: " + isGetWacthliststate);
-    //       });
-    // }
     function getAllWatchlists(email){
           email = encodeURIComponent(email);
           const url = "/api/v1/watchlist?email=" + email;
@@ -40,10 +19,17 @@ function WatchlistButton({userEmail, media}) {
                 return response.json();
               }).then(responseData => {
                 // can loop through this list and get .listName, .dateCreated
-                const watchLists = responseData.watchLists;
+                const watchLists = responseData.watchLists.watchlists;
                 // setGetWacthliststate(watchLists);
-                console.log(watchLists);
+                var i;
+                var list = [];
+                for (i = 0; i < watchLists.length; i++) {
+                  list.push(watchLists[i].listName);
+                }
+                console.log(list);
+                // setGetWacthliststate(list);
               });
+              
     }
     
     function isWatchitemOnWatchlist(email, listName, media){
@@ -140,7 +126,7 @@ function WatchlistButton({userEmail, media}) {
     isWatchitemOnWatchlist(userEmail, listName, media);
     getAllWatchlists(userEmail);
 
-    // add a state called isInWatchlistState to keep track of whether or not this media  is favorited or not
+    // add a state called isInWatchlistState to keep track of whether or not this media is favorited or not
     // Call the fucntion isFavorite. Inside the function, add a line to save the server result to isInWatchlistState
     // If the function is favorited, Display the text "Unfavorite". If it is unfavorited, display "Favorite"
     // when the button is clicked, use the changeFavorite function to tell the server to set it from favorite to unfavorite, or vice versa
