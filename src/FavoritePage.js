@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import FavoriteButton from "./FavoriteButton.js";
 
 function FavoritePage({userEmail}) {
     const [allFavorites, setAllFavorites] = useState([]);
@@ -26,10 +27,14 @@ function FavoritePage({userEmail}) {
         getAllFavorites(userEmail);
     }, []);
     
+    //TODO: PUT WATCHLIST BELOW FAVORITE
     return (
         <div>
            {allFavorites.map((fav) => (
-          <a> {fav} </a>
+          <div>
+              <p style={{color : 'white'}}> {fav} </p>
+              <FavoriteButton userEmail={userEmail} media={fav}/>
+          </div>
         ))}
         </div>
     )
