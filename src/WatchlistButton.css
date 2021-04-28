@@ -1,0 +1,16 @@
+/*button {*/
+/*    display: inline-block;*/
+/*    height: 25px;*/
+/*    padding: 0;*/
+/*    margin: 0;*/
+/*    vertical-align: top;*/
+/*    width: 104px;*/
+/*}*/
+.listName {
+    height: 34px;
+    width: 150px;
+    background-color: #800000;
+    border-radius: 4px;
+    color: #FFFFFF;
+    vertical-align: top;
+}
