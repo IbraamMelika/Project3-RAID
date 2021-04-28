@@ -309,11 +309,11 @@ export function App() {
           <nav className="grid">
             <ul>
               <li><img src="movielogosmall.jpg" alt="page logo" className="logo"></img></li>
-              <li><a href='default.asp'>Movie Finder</a></li>
-              <li><a href='default.asp'>Watchlist</a></li>
+              <li><button style={{background : 'none', border:'none', color : 'white'}}>Movie Finder</button></li>
+              <li><button style={{background : 'none', border:'none', color : 'white'}}>Watchlist</button></li>
               <li><button onClick={favoriteClickHandler} style={{background : 'none', border:'none', color : 'white'}}>Favorites</button></li>
               <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
-              <li><a href='default.asp'>{userName}</a></li>
+              <li><button style={{background : 'none', border:'none', color : 'white'}}>{userName}</button></li>
               <li><Logout hidePage={hidePage}/></li>
             </ul>
           </nav>
