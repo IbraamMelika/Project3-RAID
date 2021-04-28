@@ -6,6 +6,7 @@ import RowRetry from './RowRetry'
 import Banner from './Banner'
 import Logout from './Logout';
 import Landing from './Landing';
+import FavoritePage from './FavoritePage';
 import { useState, useRef, useEffect } from 'react';
 
 const API_KEY =`${process.env.REACT_APP_API_KEY}`;
@@ -259,12 +260,17 @@ function isWatchitemOnWatchlist(email, listName, media){
 }
 
 export function App() {
+  const [showAllFavorites, setShowAllFavorites] = useState(false)
   const [searchTerm, setsearchTerm] = useState(" ");
   const [beingSearched, setBeingSearched] = useState(false);
   const [appShown, setShown] = useState(false);
   const [userImage, setUserImage] = useState('');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  
+  function favoriteClickHandler(){
+    setShowAllFavorites(!showAllFavorites);
+  }
   
   function searchChangeHandler(event){
     const searchValue = event.target.value;
@@ -305,12 +311,14 @@ export function App() {
               <li><img src="movielogosmall.jpg" alt="page logo" className="logo"></img></li>
               <li><a href='default.asp'>Movie Finder</a></li>
               <li><a href='default.asp'>Watchlist</a></li>
-              <li><a href='default.asp'>Favorites</a></li>
+              <li><a onClick={favoriteClickHandler}>Favorites</a></li>
               <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
               <li><a href='default.asp'>{userName}</a></li>
               <li><Logout hidePage={hidePage}/></li>
             </ul>
           </nav>
+          { showAllFavorites === true ? (<p>HELLO!!!!</p>)
+          : null}
           <div className="search-div">
             <input type="text" id="searchValue" placeholder="Search Movie..." className="searchbar" onChange={searchChangeHandler}/>
           </div>
