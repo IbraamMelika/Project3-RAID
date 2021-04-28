@@ -32,7 +32,7 @@ function Login(prop) {
     <div>
       <button onClick={signIn} className="button">
         <img src="google.svg" alt="google login" className="icon"></img>
-        <span className="buttonText">Sign in with Google</span>
+        <span className="buttonText">Continue with Google</span>
       </button>
     </div>
   );
