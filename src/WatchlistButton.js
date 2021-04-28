@@ -5,7 +5,7 @@ function WatchlistButton({userEmail, media}) {
     const [isDropDown, setDropDown] = useState(false);
     const [isInWatchlistState, setIsInWatchlistState] = useState(false);
     const [getAllWatchlistsstate, setgetAllWatchlistsstate] = useState( [ 'Default List', 'MyMovieList', 'watchlater'] );
-    const listName = null;
+    // const listName = null;
     const [ListTorF, setListTorF] = useState([]);
     
     function getAllWatchlists(email){
@@ -30,7 +30,7 @@ function WatchlistButton({userEmail, media}) {
                   list.push(watchLists[i].listName);
                 }
                 setgetAllWatchlistsstate(list);
-                console.log(list);
+                // console.log(list);
               });
     }
     
@@ -57,7 +57,7 @@ function WatchlistButton({userEmail, media}) {
             const isOnWatchlist = responseData.isOnWatchlist;
             // Here save whether or not this thing is favorited to the state
             setIsInWatchlistState(isOnWatchlist);
-            console.log("Is On List: " + isOnWatchlist);
+            // console.log("Is On List: " + isOnWatchlist);
           });
     }
     
@@ -80,27 +80,7 @@ function WatchlistButton({userEmail, media}) {
          .then(response => {
             return response.json();
           }).then(responseData => {
-            console.log(responseData);
-          });
-    }
-    
-    function getAllWatchitemsOnWatchlist(email, listName){
-      email = encodeURIComponent(email);
-      listName = encodeURIComponent(listName);
-      const url = "/api/v1/watchitem?email=" + email + "&listName=" + listName;
-      
-       fetch(url, {
-          method: 'GET',
-           headers: {
-              'Content-Type': 'application/json'
-             },
-           })
-         .then(response => {
-            return response.json();
-          }).then(responseData => {
-            // can loop through list and get .media, .dateAdded for each
-            const watchItems = responseData.watchItems;
-            console.log(watchItems);
+            // console.log(responseData);
           });
     }
     
@@ -124,31 +104,30 @@ function WatchlistButton({userEmail, media}) {
          .then(response => {
             return response.json();
           }).then(responseData => {
-            console.log(responseData);
+            // console.log(responseData);
           });
     }
     
     const handleAddtoList = () => {
        setDropDown(!isDropDown);
+       getAllWatchlists(userEmail);  
         var listTF = [];
         for (var i = 0; i < getAllWatchlistsstate.length; i++) {
             // const [isInWatchlistState, setIsInWatchlistState] = useState(false);
             isWatchitemOnWatchlist(userEmail, getAllWatchlistsstate[i], media);
-            console.log(getAllWatchlistsstate[i], isInWatchlistState);
+            // console.log(getAllWatchlistsstate[i], isInWatchlistState);
             listTF.push(isInWatchlistState);
         }
         setListTorF(listTF);
     };
-    console.log("ListTorF: ----------", ListTorF);
+    
+    // console.log("ListTorF: ----------", ListTorF);
     const handleAddorRemoveClick = (index) => {
         const listName = index;
         const position = getAllWatchlistsstate.findIndex(x => x ===listName);
-        console.log("TorF: ----------", position);
-        // addOrRemoveWatchitemFromWatchlist(userEmail, listName, media, !TorF);
-        
-        
-    //   isWatchitemOnWatchlist(userEmail, listName, media);
-        // setIsInWatchlistState(!TorF);
+        // console.log("TorF: +++++++++++++", ListTorF[position]);
+        addOrRemoveWatchitemFromWatchlist(userEmail, listName, media, !ListTorF[position]);
+        setDropDown(!isDropDown);
     };
     
     const handleCreateList = () => {
