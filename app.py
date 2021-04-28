@@ -219,10 +219,13 @@ def endpoint_person():
 
         if is_person(email):
             print("Person already in DB")
+            if not is_watchlist(email, "Default List"):
+                add_watchlist(email, "Default List")
             return {'success': True, 'newUser': False}
 
         print("Person not in DB")
         add_person(email)
+        add_watchlist(email, "Default List")
         return {'success': True, 'newUser': True}
 
     return Response("Error: Unknown", status=400)

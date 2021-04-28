@@ -110,25 +110,6 @@ function getAllFavorites(email){
       });
 }
 
-function getAllWatchlists(email){
-  email = encodeURIComponent(email);
-  const url = "/api/v1/watchlist?email=" + email;
-  
-  fetch(url, {
-      method: 'GET',
-       headers: {
-          'Content-Type': 'application/json'
-         },
-       })
-     .then(response => {
-        return response.json();
-      }).then(responseData => {
-        // can loop through this list and get .listName, .dateCreated
-        const watchLists = responseData.watchLists
-        console.log(watchLists)
-      });
-}
-
 function getAllComments(media){
   media = encodeURIComponent(media);
   const url = "/api/v1/comment?media=" + media;
@@ -167,6 +148,25 @@ function addComment(email, media, message){
         return response.json();
       }).then(responseData => {
         console.log(responseData);
+      });
+}
+
+function getAllWatchlists(email){
+  email = encodeURIComponent(email);
+  const url = "/api/v1/watchlist?email=" + email;
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        // can loop through this list and get .listName, .dateCreated
+        const watchLists = responseData.watchLists
+        console.log(watchLists)
       });
 }
 
