@@ -4,8 +4,8 @@ import './App.css'
 import requests from './requests'
 import RowRetry from './RowRetry'
 import Banner from './Banner'
-import Login from './Login';
 import Logout from './Logout';
+import Landing from './Landing';
 import { useState, useRef, useEffect } from 'react';
 
 const API_KEY =`${process.env.REACT_APP_API_KEY}`;
@@ -110,25 +110,6 @@ function getAllFavorites(email){
       });
 }
 
-function getAllWatchlists(email){
-  email = encodeURIComponent(email);
-  const url = "/api/v1/watchlist?email=" + email;
-  
-  fetch(url, {
-      method: 'GET',
-       headers: {
-          'Content-Type': 'application/json'
-         },
-       })
-     .then(response => {
-        return response.json();
-      }).then(responseData => {
-        // can loop through this list and get .listName, .dateCreated
-        const watchLists = responseData.watchLists
-        console.log(watchLists)
-      });
-}
-
 function getAllComments(media){
   media = encodeURIComponent(media);
   const url = "/api/v1/comment?media=" + media;
@@ -167,6 +148,25 @@ function addComment(email, media, message){
         return response.json();
       }).then(responseData => {
         console.log(responseData);
+      });
+}
+
+function getAllWatchlists(email){
+  email = encodeURIComponent(email);
+  const url = "/api/v1/watchlist?email=" + email;
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        // can loop through this list and get .listName, .dateCreated
+        const watchLists = responseData.watchLists
+        console.log(watchLists)
       });
 }
 
@@ -287,7 +287,7 @@ export function App() {
     setShown(false);
   }
   
-  // Grab google user info from login component
+  // Grab google user info from login component and push to database
   const grabUserInfo = (data) => { 
     setUserName(data.name);
     setUserImage(data.imageUrl);
@@ -302,11 +302,12 @@ export function App() {
       <div className="App">
           <nav className="grid">
             <ul>
-              <li><a href='defaul.asp'>Movie Finder</a></li>
-              <li><a href='defaul.asp'>Watchlist</a></li>
-              <li><a href='defaul.asp'>Favorites</a></li>
+              <li><img src="movielogosmall.jpg" alt="page logo" className="logo"></img></li>
+              <li><a href='default.asp'>Movie Finder</a></li>
+              <li><a href='default.asp'>Watchlist</a></li>
+              <li><a href='default.asp'>Favorites</a></li>
               <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
-              <li><a href='defaul.asp'>{userName}</a></li>
+              <li><a href='default.asp'>{userName}</a></li>
               <li><Logout hidePage={hidePage}/></li>
             </ul>
           </nav>
@@ -330,7 +331,7 @@ export function App() {
       </div>
     ) : (
           <div>
-            <Login showPage={showPage} grabUserInfo={grabUserInfo}/>
+            <Landing showPage={showPage} grabUserInfo={grabUserInfo}/>
           </div>
         )}      
  </div>
