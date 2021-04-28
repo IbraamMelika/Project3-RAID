@@ -25,7 +25,7 @@ function FavoritePage({userEmail}) {
     //This makes sure getAllFavorites is only run once each time the component is loaded
     useEffect(() => {
         getAllFavorites(userEmail);
-    }, []);
+    });
     
     //TODO: PUT WATCHLIST BELOW FAVORITE
     return (
