@@ -317,7 +317,7 @@ export function App() {
               <li><Logout hidePage={hidePage}/></li>
             </ul>
           </nav>
-          { showAllFavorites === true ? (<p>HELLO!!!!</p>)
+          { showAllFavorites === true ? (<FavoritePage userEmail={userEmail}/>)
           : null}
           <div className="search-div">
             <input type="text" id="searchValue" placeholder="Search Movie..." className="searchbar" onChange={searchChangeHandler}/>
