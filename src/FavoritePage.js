@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 function FavoritePage({userEmail}) {
     const [allFavorites, setAllFavorites] = useState([]);
@@ -20,11 +20,14 @@ function FavoritePage({userEmail}) {
             setAllFavorites(favoritesList);
           });
 }
-    getAllFavorites(userEmail);
+
+    //This makes sure getAllFavorites is only run once each time the component is loaded
+    useEffect(() => {
+        getAllFavorites(userEmail);
+    }, []);
     
     return (
         <div>
-        <p> WOOOOOOOOOOOOOOW </p>
            {allFavorites.map((fav) => (
           <a> {fav} </a>
         ))}
