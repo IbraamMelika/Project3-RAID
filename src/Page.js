@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import FavoriteButton from "./FavoriteButton.js"
-import Comments from "./Comments.js"
+import CommentsBox from "./CommentsBox.js"
 import YouTube from "react-youtube"
 import movieTrailer from "movie-trailer"
 
@@ -48,7 +48,7 @@ function Page({name, userEmail}) {
             <YouTube videoId={trailerURL} opts={opts}/>
             
             <div className="comments_section">
-                <Comments name={name} userEmail={userEmail}/>
+                <CommentsBox name={name} userEmail={userEmail}/>
             </div>
         </div>
         
