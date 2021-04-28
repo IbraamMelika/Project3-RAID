@@ -6,6 +6,7 @@ function WatchlistButton({userEmail, media}) {
     const [isInWatchlistState, setIsInWatchlistState] = useState(false);
     const [getAllWatchlistsstate, setgetAllWatchlistsstate] = useState( [ 'Default List', 'MyMovieList', 'watchlater'] );
     const listName = null;
+    const [ListTorF, setListTorF] = useState([]);
     
     function getAllWatchlists(email){
           email = encodeURIComponent(email);
@@ -31,11 +32,12 @@ function WatchlistButton({userEmail, media}) {
                 setgetAllWatchlistsstate(list);
                 console.log(list);
               });
-              
     }
+    
     if (isDropDown !== false){
-        getAllWatchlists(userEmail);    
+        getAllWatchlists(userEmail);  
     }
+    
     function isWatchitemOnWatchlist(email, listName, media){
         email = encodeURIComponent(email);
         listName = encodeURIComponent(listName);
@@ -126,41 +128,42 @@ function WatchlistButton({userEmail, media}) {
           });
     }
     
-    // console.log("Fetching isInWatchlist");
-    // isWatchitemOnWatchlist(userEmail, listName, media);
-    
-
-    // add a state called isInWatchlistState to keep track of whether or not this media is favorited or not
-    // Call the fucntion isFavorite. Inside the function, add a line to save the server result to isInWatchlistState
-    // If the function is favorited, Display the text "Unfavorite". If it is unfavorited, display "Favorite"
-    // when the button is clicked, use the changeFavorite function to tell the server to set it from favorite to unfavorite, or vice versa
-    // Then, set the isInWatchlistState here to the opposite of what it is.
     const handleAddtoList = () => {
        setDropDown(!isDropDown);
+        var listTF = [];
+        for (var i = 0; i < getAllWatchlistsstate.length; i++) {
+            // const [isInWatchlistState, setIsInWatchlistState] = useState(false);
+            isWatchitemOnWatchlist(userEmail, getAllWatchlistsstate[i], media);
+            console.log(getAllWatchlistsstate[i], isInWatchlistState);
+            listTF.push(isInWatchlistState);
+        }
+        setListTorF(listTF);
     };
-    console.log("Is isInWatchlistState +++++: " + isInWatchlistState);
+    console.log("ListTorF: ----------", ListTorF);
     const handleAddorRemoveClick = (index) => {
-        isWatchitemOnWatchlist(userEmail, index, media);
         const listName = index;
-        var TorF = isInWatchlistState;
-        console.log("TorF: ----------", TorF);
-        addOrRemoveWatchitemFromWatchlist(userEmail, listName, media, !TorF);
+        const position = getAllWatchlistsstate.findIndex(x => x ===listName);
+        console.log("TorF: ----------", position);
+        // addOrRemoveWatchitemFromWatchlist(userEmail, listName, media, !TorF);
+        
+        
     //   isWatchitemOnWatchlist(userEmail, listName, media);
         // setIsInWatchlistState(!TorF);
     };
+    
     const handleCreateList = () => {
         const listName = document.getElementById("CreateWatchlist").value;
         addOrRemoveWatchlist(userEmail, listName, true);
         setDropDown(!isDropDown);
     };
+    
     const handledeleteList = (index) => {
         const listName = index;
-        // const listName = document.getElementById("CreateWatchlist").value;
         addOrRemoveWatchlist(userEmail, listName, false);
         setDropDown(!isDropDown);
     };
 
-    console.log("Email " + userEmail +" listName " + listName + " Media " + media);
+    // console.log("Email " + userEmail +" listName " + listName + " Media " + media);
     
     if (isDropDown){
         return (
@@ -177,14 +180,14 @@ function WatchlistButton({userEmail, media}) {
                     <>
                         <button class="listName" onClick={ () => handleAddorRemoveClick(index) }> { index } </button>
                         <button onClick={ () => handledeleteList(index) }>
-                            <img src="trash-sign-red-icon.jpg" width="20" height="24" ></img>
+                            <img src="trash-sign-red-icon.jpg" width="20" height="24" alt='Trash'></img>
                         </button><br></br>
                     </>
                     )}
                 </div>
             </div>
         );
-    } 
+    }
     else {
         return (
         <div> 
