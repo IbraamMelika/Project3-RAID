@@ -3,10 +3,10 @@ import FavoriteButton from "./FavoriteButton.js"
 import YouTube from "react-youtube"
 import movieTrailer from "movie-trailer"
 
-function Page({name, userEmail}) {
+function Page({movieObj, userEmail}) {
     const [trailerURL, setTrailerURL] = useState("");
 
-    //const theName = {name}
+    const name = movieObj?.title || movieObj?.name || movieObj?.original_name;
 
     const handleClick = (movie) => {
         movieTrailer(movie || "")
@@ -17,15 +17,8 @@ function Page({name, userEmail}) {
         .catch((error) => console.log(error))
     }
 
-    var nameStringy = JSON.stringify({name})
-    var obj = JSON.parse(nameStringy)
-    var values = Object.values(obj)
-    //values [0] is the name of the movie
-    
-
-    handleClick(values[0])
-    //console.log(trailerURL)
-    console.log(values[0])
+    handleClick(name);
+    console.log(movieObj);
 
     //you need this for the youtube video size
     const opts = {
@@ -41,6 +34,9 @@ function Page({name, userEmail}) {
             <h1>
             This is the page for {name}
             </h1>
+            
+            <h3> {movieObj.overview} </h3>
+            <p>Released {movieObj?.first_air_date || movieObj?.release_date}</p>
             
             <FavoriteButton userEmail={userEmail} media={name}/>
             
