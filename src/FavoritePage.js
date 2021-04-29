@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import FavoriteButton from "./FavoriteButton.js";
 
 function FavoritePage({userEmail}) {
@@ -23,15 +23,11 @@ function FavoritePage({userEmail}) {
           });
 }
 
-    //This makes sure getAllFavorites is only run once each time the component is loaded
-    useEffect(() => {
-        
-        //Ok so the useEffect doens't actually work, so I did this
-        if (!hasFetchedFavorites){
-            getAllFavorites(userEmail);
-        }
-        setHasFetchedFavorites(true);
-    });
+    //Ok so the useEffect doens't actually work, so I did this
+    if (!hasFetchedFavorites){
+        getAllFavorites(userEmail);
+    }
+    setHasFetchedFavorites(true);
     
     //TODO: PUT WATCHLIST BELOW FAVORITE
     return (

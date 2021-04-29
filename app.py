@@ -86,9 +86,6 @@ def is_favorite(email, media):
 def add_favorite(email, media):
     '''Make given media a favorite for the user'''
 
-    if media == "":
-        return
-
     new_fav = Favorite(email=email, media=media)
     DB.session.add(new_fav)
     DB.session.commit()
@@ -101,6 +98,11 @@ def remove_favorite(email, media):
 
 def get_all_favorites(email):
     '''Returns all favorites for that person.'''
+    all_fav = Favorite.query.filter_by(email=email).all()
+    return all_fav
+
+def get_all_favorites_ordered(email):
+    '''Returns all favorites for that person ordered by name.'''
     all_fav = Favorite.query.filter_by(email=email).order_by(Favorite.media).all()
     return all_fav
 
@@ -253,7 +255,7 @@ def endpoint_favorite():
         if media != '':
             return {'isFavorite': is_favorite(email, media)}
 
-        all_favs = get_all_favorites(email)
+        all_favs = get_all_favorites_ordered(email)
         name_list = [fav.media for fav in all_favs]
         return {'allFavorites': name_list}
 
