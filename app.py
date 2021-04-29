@@ -86,6 +86,9 @@ def is_favorite(email, media):
 def add_favorite(email, media):
     '''Make given media a favorite for the user'''
 
+    if media == "":
+        return
+
     new_fav = Favorite(email=email, media=media)
     DB.session.add(new_fav)
     DB.session.commit()
