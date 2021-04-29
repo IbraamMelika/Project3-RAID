@@ -326,7 +326,7 @@ export function App() {
           { beingSearched === true ? 
           (<RowRetry title="Search Results" 
           fetchURL={"/search/multi?api_key="+API_KEY+"&language=en-US&query="+searchTerm+"&page=1&include_adult=false"}
-          isLargeRow/>)
+          isLargeRow userEmail={userEmail}/>)
           : null}
           <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} userEmail={userEmail} isLargeRow/>
           <RowRetry title="Trending Now" fetchURL={requests.fetchTrending} userEmail={userEmail}/>

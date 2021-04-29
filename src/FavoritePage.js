@@ -3,6 +3,7 @@ import FavoriteButton from "./FavoriteButton.js";
 
 function FavoritePage({userEmail}) {
     const [allFavorites, setAllFavorites] = useState([]);
+    const [hasFetchedFavorites, setHasFetchedFavorites] = useState(false);
     
     function getAllFavorites(email){
       email = encodeURIComponent(email);
@@ -24,7 +25,12 @@ function FavoritePage({userEmail}) {
 
     //This makes sure getAllFavorites is only run once each time the component is loaded
     useEffect(() => {
-        getAllFavorites(userEmail);
+        
+        //Ok so the useEffect doens't actually work, so I did this
+        if (!hasFetchedFavorites){
+            getAllFavorites(userEmail);
+        }
+        setHasFetchedFavorites(true);
     });
     
     //TODO: PUT WATCHLIST BELOW FAVORITE
