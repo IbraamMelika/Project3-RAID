@@ -4,8 +4,9 @@ import './App.css'
 import requests from './requests'
 import RowRetry from './RowRetry'
 import Banner from './Banner'
-import Login from './Login';
 import Logout from './Logout';
+import Landing from './Landing';
+import FavoritePage from './FavoritePage';
 import { useState, useRef, useEffect } from 'react';
 
 const API_KEY =`${process.env.REACT_APP_API_KEY}`;
@@ -110,25 +111,6 @@ function getAllFavorites(email){
       });
 }
 
-function getAllWatchlists(email){
-  email = encodeURIComponent(email);
-  const url = "/api/v1/watchlist?email=" + email;
-  
-  fetch(url, {
-      method: 'GET',
-       headers: {
-          'Content-Type': 'application/json'
-         },
-       })
-     .then(response => {
-        return response.json();
-      }).then(responseData => {
-        // can loop through this list and get .listName, .dateCreated
-        const watchLists = responseData.watchLists
-        console.log(watchLists)
-      });
-}
-
 export function getAllComments(media){
   media = encodeURIComponent(media);
   const url = "/api/v1/comment?media=" + media;
@@ -167,6 +149,25 @@ export function addComment(email, media, message){
         return response.json();
       }).then(responseData => {
         console.log(responseData);
+      });
+}
+
+function getAllWatchlists(email){
+  email = encodeURIComponent(email);
+  const url = "/api/v1/watchlist?email=" + email;
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        // can loop through this list and get .listName, .dateCreated
+        const watchLists = responseData.watchLists
+        console.log(watchLists)
       });
 }
 
@@ -237,13 +238,39 @@ function addOrRemoveWatchitemFromWatchlist(email, listName, media, addOrRemove){
       });
 }
 
+function isWatchitemOnWatchlist(email, listName, media){
+  email = encodeURIComponent(email);
+  listName = encodeURIComponent(listName);
+  media = encodeURIComponent(media);
+  
+  const url = "/api/v1/watchitem?email=" + email + "&media=" + media + "&listName=" + listName;
+  
+  fetch(url, {
+      method: 'GET',
+       headers: {
+          'Content-Type': 'application/json'
+         }
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        const isOnWatchlist = responseData.isOnWatchlist;
+        console.log("Is On List: " + isOnWatchlist);
+      });
+}
+
 export function App() {
+  const [showAllFavorites, setShowAllFavorites] = useState(false)
   const [searchTerm, setsearchTerm] = useState(" ");
   const [beingSearched, setBeingSearched] = useState(false);
   const [appShown, setShown] = useState(false);
   const [userImage, setUserImage] = useState('');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  
+  function favoriteClickHandler(){
+    setShowAllFavorites(!showAllFavorites);
+  }
   
   function searchChangeHandler(event){
     const searchValue = event.target.value;
@@ -266,7 +293,7 @@ export function App() {
     setShown(false);
   }
   
-  // Grab google user info from login component
+  // Grab google user info from login component and push to database
   const grabUserInfo = (data) => { 
     setUserName(data.name);
     setUserImage(data.imageUrl);
@@ -281,14 +308,17 @@ export function App() {
       <div className="App">
           <nav className="grid">
             <ul>
-              <li><a href='defaul.asp'>Movie Finder</a></li>
-              <li><a href='defaul.asp'>Watchlist</a></li>
-              <li><a href='defaul.asp'>Favorites</a></li>
+              <li><img src="movielogosmall.jpg" alt="page logo" className="logo"></img></li>
+              <li><button style={{background : 'none', border:'none', color : 'white'}}>Movie Finder</button></li>
+              <li><button style={{background : 'none', border:'none', color : 'white'}}>Watchlist</button></li>
+              <li><button onClick={favoriteClickHandler} style={{background : 'none', border:'none', color : 'white'}}>Favorites</button></li>
               <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
-              <li><a href='defaul.asp'>{userName}</a></li>
+              <li><button style={{background : 'none', border:'none', color : 'white'}}>{userName}</button></li>
               <li><Logout hidePage={hidePage}/></li>
             </ul>
           </nav>
+          { showAllFavorites === true ? (<FavoritePage userEmail={userEmail}/>)
+          : null}
           <div className="search-div">
             <input type="text" id="searchValue" placeholder="Search Movie..." className="searchbar" onChange={searchChangeHandler}/>
           </div>
@@ -296,7 +326,7 @@ export function App() {
           { beingSearched === true ? 
           (<RowRetry title="Search Results" 
           fetchURL={"/search/multi?api_key="+API_KEY+"&language=en-US&query="+searchTerm+"&page=1&include_adult=false"}
-          isLargeRow/>)
+          isLargeRow userEmail={userEmail}/>)
           : null}
           <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} userEmail={userEmail} isLargeRow/>
           <RowRetry title="Trending Now" fetchURL={requests.fetchTrending} userEmail={userEmail}/>
@@ -308,7 +338,7 @@ export function App() {
       </div>
     ) : (
           <div>
-            <Login showPage={showPage} grabUserInfo={grabUserInfo}/>
+            <Landing showPage={showPage} grabUserInfo={grabUserInfo}/>
           </div>
         )}      
  </div>

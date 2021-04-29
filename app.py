@@ -101,6 +101,11 @@ def get_all_favorites(email):
     all_fav = Favorite.query.filter_by(email=email).all()
     return all_fav
 
+def get_all_favorites_ordered(email):
+    '''Returns all favorites for that person ordered by name.'''
+    all_fav = Favorite.query.filter_by(email=email).order_by(Favorite.media).all()
+    return all_fav
+
 def add_comment(email, media, message):
     '''Add a comment. Timestamp automatically generated.'''
 
@@ -219,10 +224,13 @@ def endpoint_person():
 
         if is_person(email):
             print("Person already in DB")
+            if not is_watchlist(email, "Default List"):
+                add_watchlist(email, "Default List")
             return {'success': True, 'newUser': False}
 
         print("Person not in DB")
         add_person(email)
+        add_watchlist(email, "Default List")
         return {'success': True, 'newUser': True}
 
     return Response("Error: Unknown", status=400)
@@ -247,7 +255,7 @@ def endpoint_favorite():
         if media != '':
             return {'isFavorite': is_favorite(email, media)}
 
-        all_favs = get_all_favorites(email)
+        all_favs = get_all_favorites_ordered(email)
         name_list = [fav.media for fav in all_favs]
         return {'allFavorites': name_list}
 
@@ -361,9 +369,13 @@ def endpoint_watchitem():
         print("Got GET from Watchitem")
         email = unquote(request.args.get('email', ''))
         list_name = unquote(request.args.get('listName', ''))
+        media = unquote(request.args.get('media', ''))
 
         if email == '' or list_name == '':
             return Response('Failed to pass a parameter', status=400)
+
+        if media != '':
+            return {'isOnWatchlist': is_watchitem_on_watchlist(email, list_name, media)}
 
         items = get_all_watchitems_on_watchlist(email, list_name)
         return_item = {"watchItems" : \
@@ -387,8 +399,6 @@ def endpoint_watchitem():
             return {'success': True}
 
         print("POST error")
-        return Response(
-            "Mismatch between adding/deleting and whether it already exists or not.", status=400)
 
     return Response("Unknown Error", status=400)
 
