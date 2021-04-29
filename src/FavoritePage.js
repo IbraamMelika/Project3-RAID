@@ -1,9 +1,8 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import FavoriteButton from "./FavoriteButton.js";
 
 function FavoritePage({userEmail}) {
     const [allFavorites, setAllFavorites] = useState([]);
-    const [hasFetchedFavorites, setHasFetchedFavorites] = useState(false);
     
     function getAllFavorites(email){
       email = encodeURIComponent(email);
@@ -23,11 +22,12 @@ function FavoritePage({userEmail}) {
           });
 }
 
-    //Ok so the useEffect doens't actually work, so I did this
-    if (!hasFetchedFavorites){
+    
+    useEffect(() => {
         getAllFavorites(userEmail);
-    }
-    setHasFetchedFavorites(true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     
     //TODO: PUT WATCHLIST BELOW FAVORITE
     return (
