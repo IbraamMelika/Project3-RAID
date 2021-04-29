@@ -101,7 +101,7 @@ def remove_favorite(email, media):
 
 def get_all_favorites(email):
     '''Returns all favorites for that person.'''
-    all_fav = Favorite.query.filter_by(email=email).all()
+    all_fav = Favorite.query.filter_by(email=email).order_by(Favorite.media).all()
     return all_fav
 
 def add_comment(email, media, message):
