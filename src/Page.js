@@ -8,7 +8,7 @@ function Page({name, userEmail}) {
     const [trailerURL, setTrailerURL] = useState("");
 
     //const theName = {name}
-
+    
     const handleClick = (movie) => {
         movieTrailer(movie || "")
         .then((url) => {

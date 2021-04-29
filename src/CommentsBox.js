@@ -29,7 +29,7 @@ function CommentsBox({name, userEmail}) {
   //this works
   //"Stowaway"
   //getAllComments("Stowaway");
-  //console.log(commentState);
+  //console.log(typeof commentState);
   
 
     /*
