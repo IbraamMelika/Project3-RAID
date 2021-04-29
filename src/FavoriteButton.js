@@ -27,6 +27,10 @@ function FavoriteButton({userEmail, media}) {
     
     function changeFavorite(email, media, willBeFavorite){
       /* willBeFavorite is a boolean value */
+      if (media === ""){
+          console.log("EMPTY NAME!!!")
+          return;
+      }
       
       email = encodeURIComponent(email);
       media = encodeURIComponent(media);
