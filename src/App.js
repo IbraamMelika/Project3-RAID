@@ -7,6 +7,7 @@ import Banner from './Banner'
 import Logout from './Logout';
 import Landing from './Landing';
 import FavoritePage from './FavoritePage';
+import WatchlistPage from './WatchlistPage';
 import { useState, useRef, useEffect } from 'react';
 
 const API_KEY =`${process.env.REACT_APP_API_KEY}`;
@@ -260,7 +261,8 @@ function isWatchitemOnWatchlist(email, listName, media){
 }
 
 export function App() {
-  const [showAllFavorites, setShowAllFavorites] = useState(false)
+  const [showAllFavorites, setShowAllFavorites] = useState(false);
+  const [showAllwatchLists, setshowAllwatchLists] = useState(false);
   const [searchTerm, setsearchTerm] = useState(" ");
   const [beingSearched, setBeingSearched] = useState(false);
   const [appShown, setShown] = useState(false);
@@ -270,6 +272,10 @@ export function App() {
   
   function favoriteClickHandler(){
     setShowAllFavorites(!showAllFavorites);
+  }
+  
+  function watchListClickHandler(){
+    setshowAllwatchLists(!showAllwatchLists);
   }
   
   function searchChangeHandler(event){
@@ -310,7 +316,7 @@ export function App() {
             <ul>
               <li><img src="movielogosmall.jpg" alt="page logo" className="logo"></img></li>
               <li><button style={{background : 'none', border:'none', color : 'white'}}>Movie Finder</button></li>
-              <li><button style={{background : 'none', border:'none', color : 'white'}}>Watchlist</button></li>
+              <li><button onClick={watchListClickHandler} style={{background : 'none', border:'none', color : 'white'}}>Watchlist</button></li>
               <li><button onClick={favoriteClickHandler} style={{background : 'none', border:'none', color : 'white'}}>Favorites</button></li>
               <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
               <li><button style={{background : 'none', border:'none', color : 'white'}}>{userName}</button></li>
@@ -318,6 +324,8 @@ export function App() {
             </ul>
           </nav>
           { showAllFavorites === true ? (<FavoritePage userEmail={userEmail}/>)
+          : null}
+          { showAllwatchLists === true ? (<WatchlistPage userEmail={userEmail}/>)
           : null}
           <div className="search-div">
             <input type="text" id="searchValue" placeholder="Search Movie..." className="searchbar" onChange={searchChangeHandler}/>

@@ -4,7 +4,7 @@ import './WatchlistButton.css'
 function WatchlistButton({userEmail, media}) {
     const [isDropDown, setDropDown] = useState(false);
     const [isInWatchlistState, setIsInWatchlistState] = useState(false);
-    const [getAllWatchlistsstate, setgetAllWatchlistsstate] = useState( [ 'Default List', 'MyMovieList', 'watchlater'] );
+    const [getAllWatchlistsstate, setgetAllWatchlistsstate] = useState( [ 'Default List'] );
     // const listName = null;
     const [ListTorF, setListTorF] = useState([]);
     
@@ -57,7 +57,7 @@ function WatchlistButton({userEmail, media}) {
             const isOnWatchlist = responseData.isOnWatchlist;
             // Here save whether or not this thing is favorited to the state
             setIsInWatchlistState(isOnWatchlist);
-            // console.log("Is On List: " + isOnWatchlist);
+            console.log("Is On List: " + isOnWatchlist);
           });
     }
     
@@ -116,17 +116,20 @@ function WatchlistButton({userEmail, media}) {
             // const [isInWatchlistState, setIsInWatchlistState] = useState(false);
             isWatchitemOnWatchlist(userEmail, getAllWatchlistsstate[i], media);
             // console.log(getAllWatchlistsstate[i], isInWatchlistState);
-            listTF.push(isInWatchlistState);
+            setTimeout(listTF.push(isInWatchlistState), 1000);
         }
+        console.log(listTF);
         setListTorF(listTF);
     };
     
     // console.log("ListTorF: ----------", ListTorF);
     const handleAddorRemoveClick = (index) => {
         const listName = index;
-        const position = getAllWatchlistsstate.findIndex(x => x ===listName);
-        // console.log("TorF: +++++++++++++", ListTorF[position]);
-        addOrRemoveWatchitemFromWatchlist(userEmail, listName, media, !ListTorF[position]);
+        isWatchitemOnWatchlist(userEmail, listName, media);
+        console.log( listName+ " TorF: +++++++++++++", isInWatchlistState);
+        console.log("Email " + userEmail +" listName " + listName + " Media " + media);
+        setTimeout(addOrRemoveWatchitemFromWatchlist(userEmail, listName, media, !isInWatchlistState), 1000);
+        console.log('check');
         setDropDown(!isDropDown);
     };
     
@@ -147,7 +150,7 @@ function WatchlistButton({userEmail, media}) {
     if (isDropDown){
         return (
             <div> 
-                <button type="button" onClick={ () => handleAddtoList() }>Close Wactlist</button><br></br>
+                <button type="button" onClick={ () => handleAddtoList() }>Close watchlist</button><br></br>
                 
                 <input
                   placeholder="New Watchlist"
@@ -155,10 +158,10 @@ function WatchlistButton({userEmail, media}) {
                 />
                 <button type="button" onClick={ () => handleCreateList() }>Create</button>
                 <div>
-                    {getAllWatchlistsstate.map(index => 
+                    {getAllWatchlistsstate.map(listName => 
                     <>
-                        <button class="listName" onClick={ () => handleAddorRemoveClick(index) }> { index } </button>
-                        <button onClick={ () => handledeleteList(index) }>
+                        <button class="listName" onClick={ () => handleAddorRemoveClick(listName) }> { listName } </button>
+                        <button onClick={ () => handledeleteList(listName) }>
                             <img src="trash-sign-red-icon.jpg" width="20" height="24" alt='Trash'></img>
                         </button><br></br>
                     </>
@@ -170,7 +173,7 @@ function WatchlistButton({userEmail, media}) {
     else {
         return (
         <div> 
-            <button type="button" onClick={ () => handleAddtoList() }>Add to Wactlist</button>
+            <button type="button" onClick={ () => handleAddtoList() }>Add to watchlist</button>
         </div>
         );
     }
