@@ -5,6 +5,8 @@ import React, { useState, useEffect }from "react";
 function CommentsBox({name, userEmail}) {
   
   const [commentState, setCommentState]=useState([{ email: "", message: "", timestamp: ""}]);
+  const [boxInput, setBoxInput]=useState(null);
+  const [clicker, setClicker]=useState(false);
   
   function getAllComments(media){
     media = encodeURIComponent(media);
@@ -29,26 +31,26 @@ function CommentsBox({name, userEmail}) {
   }
   
   function addComment(email, media, message){
-  email = encodeURIComponent(email);
-  media = encodeURIComponent(media);
-  message = encodeURIComponent(message);
+    email = encodeURIComponent(email);
+    media = encodeURIComponent(media);
+    message = encodeURIComponent(message);
   
-  const url = "/api/v1/comment";
-  const data = JSON.stringify({'email': email, 'media': media, 'message': message});
+    const url = "/api/v1/comment";
+    const data = JSON.stringify({'email': email, 'media': media, 'message': message});
   
-  fetch(url, {
-      method: 'POST',
-       headers: {
-          'Content-Type': 'application/json'
-         },
-         body: data
-       })
-     .then(response => {
-        return response.json();
-      }).then(responseData => {
-        console.log(responseData);
-      });
-  }
+    fetch(url, {
+        method: 'POST',
+         headers: {
+            'Content-Type': 'application/json'
+          },
+          body: data
+         })
+       .then(response => {
+          return response.json();
+        }).then(responseData => {
+          console.log(responseData);
+        });
+    }
   
   //this works
   //"Great Show"
@@ -57,18 +59,41 @@ function CommentsBox({name, userEmail}) {
   useEffect(() => {
     getAllComments("Great Show");
     //console.log(commentState);
+    //addComment("ibraam2009@gmail.com","Great Show","testing testing")
     }, []);
     
-  console.log(commentState);
+  //console.log(commentState);
+  //var commentStateLength = commentState.length;
   
-  var commentStateLength = commentState.length;
-  {}
-    
+  function getData(val){
+    setBoxInput(val.target.value)
+    console.log(val.target.value)
+  }
+  
     return(
       <div>
-      {JSON.stringify(commentState[0]["message"])}
+      {/*JSON.stringify(commentState[0]["message"])*/}
+      <h1 className="title">Kindly leave your thoughts below</h1>
       
+      {
+      commentState.map((comment) => (
+          <div>{JSON.stringify(comment)}</div>
+        ))
+      }
       
+        <form onSubmit={"blank for now"}>
+          <div>
+            <input type="text" placeholder="Add a comment" onChange={getData}/>
+          </div>
+          <div>
+              {
+                clicker?
+                addComment("ibraam2009@gmail.com", "Great Show", "I clicked a button")
+                :null
+              }
+              <button onClick={()=>setClicker(true)}>Submit</button>
+          </div>
+        </form>
       
       </div>
     )
