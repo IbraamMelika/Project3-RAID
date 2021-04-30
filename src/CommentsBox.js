@@ -51,36 +51,25 @@ function CommentsBox({name, userEmail}) {
   }
   
   //this works
-  //"Stowaway"
+  //"Great Show"
+  //
   
   useEffect(() => {
-    getAllComments("Stowaway");
-    console.log(commentState);
+    getAllComments("Great Show");
+    //console.log(commentState);
     }, []);
+    
+  console.log(commentState);
   
-
-  
+  var commentStateLength = commentState.length;
+  {}
     
     return(
-        <div>
-        <h1 className="title">Kindly leave your thoughts below</h1>
-        <form onSubmit={"add the addComment function here"}>
-          <div className="field">
-            <div className="control">
-              <input type="text" className="input" name="name" placeholder="Your name"/>
-            </div>
-          </div>
-          <div className="field">
-            <div className="control">
-              <textarea className="textarea" name="comment" placeholder="Add a comment"></textarea>
-            </div>
-          </div>
-          <div className="field">
-            <div className="control">
-              <button className="button is-primary">Submit</button>
-            </div>
-          </div>
-        </form>
+      <div>
+      {JSON.stringify(commentState[0]["message"])}
+      
+      
+      
       </div>
     )
 }
