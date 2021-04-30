@@ -52,9 +52,9 @@ function FavoriteButton({userEmail, media}) {
           });
     }
 
-     useEffect(() => {
+    useEffect(() => {
         console.log("Fetching isFavorite");
-    isFavorite(userEmail, media);
+        isFavorite(userEmail, media);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
