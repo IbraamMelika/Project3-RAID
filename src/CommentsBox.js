@@ -1,6 +1,4 @@
 import React, { useState, useEffect }from "react";
-//import { addComment, getAllComments } from './App.js';
-
 
 function CommentsBox({name, userEmail}) {
   
@@ -52,36 +50,33 @@ function CommentsBox({name, userEmail}) {
         });
     }
   
-  //this works
-  //"Great Show"
-  //
-  
   useEffect(() => {
     getAllComments(name);
-    //console.log(commentState);
-    //addComment("ibraam2009@gmail.com","Great Show","testing testing")
-    }, []);
+    }, [name]);
     
-  console.log(boxInput);
-  //var commentStateLength = commentState.length;
+  //console.log(boxInput);
   
   function getData(val){
     setBoxInput(val.target.value)
-    
     console.log(val.target.value)
   }
   
+  
     return(
       <div>
-      {/*JSON.stringify(commentState[0]["message"])*/}
-      <h1 className="title">Kindly leave your thoughts below</h1>
+      <h1 className="title">Comments Section:</h1>
       
       {
       commentState.map((comment) => (
-          <div>{JSON.stringify(comment)}</div>
+          
+          <div>{
+              JSON.stringify(comment["email"]).slice(1,-11) + ": " +
+              JSON.stringify(comment["message"]).slice(1,-1) + " : " +
+              JSON.stringify(comment["timestamp"]).slice(1,-1)
+              }
+          </div>
         ))
       }
-      
         <form>
           <div>
             <input type="text" placeholder="Add a comment" onChange={getData}/>
@@ -92,7 +87,7 @@ function CommentsBox({name, userEmail}) {
                 addComment(userEmail, name, boxInput)
                 :null
               }
-              <button onClick={()=>setClicker(true)}>Submit</button>
+              <button onClick={()=>setClicker(true)}>Send</button>
           </div>
         </form>
       
