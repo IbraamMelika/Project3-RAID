@@ -52,6 +52,31 @@ function getUserInfoByEmail(email){
       });
 }
 
+function changeDescription(email, description){
+  /* willBeFavorite is a boolean value */
+  
+  email = encodeURIComponent(email);
+  description = encodeURIComponent(description);
+  
+  const url = "/api/v1/person";
+  const data = JSON.stringify({'email': email, 'description': description});
+  
+  fetch(url, {
+      method: 'POST',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+         body: data
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData);
+      });
+}
+
+changeDescription("ranfis.francisco@gmail.com", "love movies!!!");
+
 function isFavorite(email, media){
   email = encodeURIComponent(email);
   media = encodeURIComponent(media);

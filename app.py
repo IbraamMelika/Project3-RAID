@@ -184,8 +184,6 @@ def get_all_watchitems_on_watchlist(email, list_name):
     all_items = Watchitem.query.filter_by(email=email, listName=list_name).all()
     return all_items
 
-add_favorite("ranfis.francisco@gmail.com", 'delete')
-
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
 def index(filename):
@@ -217,7 +215,8 @@ def endpoint_person():
             return {
                 'email' : person.email,
                 'username' : person.username,
-                'joinDate': person.joinDate
+                'joinDate': person.joinDate,
+                'description': person.description
             }
 
     elif request.method == 'POST':
@@ -228,17 +227,24 @@ def endpoint_person():
         print("Got POST from person")
         request_data = request.get_json()
         email = unquote(request_data['email'])
-        print(email)
+        description = ""
+        try:
+            description = unquote(request_data['description'])
+        except:
+            pass
 
         if is_person(email):
             print("Person already in DB")
             if not is_watchlist(email, "Default List"):
                 add_watchlist(email, "Default List")
-            return {'success': True, 'newUser': False}
+        else:
+            print("Person not in DB")
+            add_person(email)
+            add_watchlist(email, "Default List")
+            
+        if not description == '':
+            change_person_desc(email, description)
 
-        print("Person not in DB")
-        add_person(email)
-        add_watchlist(email, "Default List")
         return {'success': True, 'newUser': True}
 
     return Response("Error: Unknown", status=400)
