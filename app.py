@@ -67,6 +67,13 @@ def add_person(email, username=None):
     DB.session.add(new_user)
     DB.session.commit()
 
+def change_person_desc(email, description):
+    '''Changes a person's description'''
+    
+    query = Person.query.filter_by(email=email).first()
+    query.description = description
+    DB.session.commit()
+
 def get_all_users():
     '''Returns all person from the Database.'''
     all_people = Person.query.all()
@@ -177,6 +184,7 @@ def get_all_watchitems_on_watchlist(email, list_name):
     all_items = Watchitem.query.filter_by(email=email, listName=list_name).all()
     return all_items
 
+add_favorite("ranfis.francisco@gmail.com", 'delete')
 
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
