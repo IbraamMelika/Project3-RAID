@@ -268,7 +268,7 @@ export function App() {
   const [userImage, setUserImage] = useState('');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [showProfilePage, setShowProfile] = useState(false)
+  const [showProfilePage, setShowProfile] = useState(false);
   
   function favoriteClickHandler(){
     setShowAllFavorites(!showAllFavorites);
