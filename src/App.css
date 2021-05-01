@@ -159,7 +159,7 @@
   grid-template-columns: 1fr 1fr 1fr 1fr;
   justify-items: center;
   padding-bottom: 25px;
-  background-color:#252b33;
+  background-color:#031024;
 }
 
 .profile-container .box{
@@ -179,9 +179,19 @@
 .desc-div {
   width: 30em;
   height: 20em;
-  background-color: #252b33;
+  background-color: #031024;
   color: white;
 }
+
+.desc-div p{
+  width: 25em;
+  height: 7em;
+  background-color: #081c3b;
+  color: white;
+  border-radius:10px;
+  padding: 8px;
+}
+
 
 .list-div {
   width: 15em;
@@ -189,7 +199,17 @@
   background-color: #111;
   color: white;
   text-align: center;
-  background-color: #212c3d;
+  background-color: #081c3b;
   border-radius: 10px;
   padding: 10px;
+}
+
+.edit-desc {
+  font-size: .7em;
+}
+
+.edit-desc:hover{
+  font-size: .7em;
+  text-decoration: underline;
+  color: #0e418f;
 }

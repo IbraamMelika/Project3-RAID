@@ -1,13 +1,72 @@
 import React from 'react';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import FavoritePage from './FavoritePage';
 
 function ProfilePage(prop) {
+  const [joinDate, setJoinDate] = useState("");
   const [descText, setDesc] = useState("");
   const inputRef = useRef(null);
   
+  function getUserInfoByEmail(email){
+    email = encodeURIComponent(email);
+    const url = "/api/v1/person?email=" + email;
+    
+    fetch(url, {
+        method: 'GET',
+         headers: {
+            'Content-Type': 'application/json'
+           },
+         })
+       .then(response => {
+          return response.json();
+        }).then(responseData => {
+          const joinData = responseData.joinDate;
+          const split1 = joinData.split(', ');
+          const split2 = split1[1].split(' ');
+          const joinDate = split2[1]+" "+split2[0]+' '+split2[2];
+          setJoinDate(joinDate);
+
+          const descriptionData = responseData.description;
+          setDesc(descriptionData);
+        });
+  }
+  
+  function changeDescription(email, description){
+  /* willBeFavorite is a boolean value */
+  
+  email = encodeURIComponent(email);
+  const origDesc = description;
+  description = encodeURIComponent(description);
+  
+  const url = "/api/v1/person";
+  const data = JSON.stringify({'email': email, 'description': description});
+  
+  fetch(url, {
+      method: 'POST',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+         body: data
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData);
+        setDesc(origDesc);
+      });
+}
   function submitClick() {
-    setDesc(inputRef.current.value);
+    const userInput = inputRef.current.value;
+    changeDescription(prop.userEmail, userInput);
+  }
+  
+  useEffect(() => {
+    getUserInfoByEmail(prop.userEmail);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
+  function clearDesc() {
+    setDesc(null);
   }
   
   return (
@@ -17,8 +76,9 @@ function ProfilePage(prop) {
             <div class="box"><img src={prop.userImage} alt="google profile pic" className="profile-pic"></img></div>
             <div class="box" className="desc-div">
               <br></br>
-              <h1>{prop.userName}</h1><br></br>
-              { descText === "" ? (
+              <h1>{prop.userName}</h1>
+              <h5>User since {joinDate}</h5><br></br>
+              { descText === null ? (
                 <div>
                   <textarea ref={inputRef} name="descText" cols="40" rows="5" placeholder="Enter profile description..."></textarea>
                   <br></br>
@@ -28,6 +88,7 @@ function ProfilePage(prop) {
               : ( 
                 <div>
                   <p>{descText}</p>
+                  <span className="edit-desc" onClick={clearDesc}>Edit Description</span>
                 </div>
               )}
             </div>
