@@ -69,7 +69,7 @@ def add_person(email, username=None):
 
 def change_person_desc(email, description):
     '''Changes a person's description'''
-    
+
     query = Person.query.filter_by(email=email).first()
     query.description = description
     DB.session.commit()
@@ -230,9 +230,8 @@ def endpoint_person():
         description = ""
         try:
             description = unquote(request_data['description'])
-        except:
+        except KeyError:
             pass
-
         if is_person(email):
             print("Person already in DB")
             if not is_watchlist(email, "Default List"):
@@ -241,7 +240,7 @@ def endpoint_person():
             print("Person not in DB")
             add_person(email)
             add_watchlist(email, "Default List")
-            
+
         if not description == '':
             change_person_desc(email, description)
 
