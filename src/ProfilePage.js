@@ -27,7 +27,7 @@ function ProfilePage(prop) {
                 ) 
               : ( 
                 <div>
-                  <h3>{descText}</h3>
+                  <p>{descText}</p>
                 </div>
               )}
             </div>
