@@ -17,10 +17,11 @@ def define_person_class(database):
         email = database.Column(database.String(80), primary_key=True)
         username = database.Column(database.String(80), default="DefaultUsername", unique=True)
         joinDate = database.Column(database.DateTime(timezone=True), default=func.now())
+        description = database.Column(database.String(300), default="")
 
         def __repr__(self):
-            return '<Email: {} username: {} joinDate: {}>'.format(
-                self.email, self.username, self.joinDate)
+            return '<Email: {} username: {} joinDate: {} desc: {}>'.format(
+                self.email, self.username, self.joinDate, self.description)
 
     return Person
 
@@ -100,3 +101,25 @@ def define_watchitem_class(database, watchlist):
                 self.email, self.listName, self.media, self.dateAdded)
 
     return Watchitem
+
+'''
+---------------------------------+-----------------
+ raf44@njit.edu                  | raf285
+ avp76@njit.edu                  | avp448
+ ibraam2009@gmail.com            | ibr503
+ ranfis.francisco@gmail.com      | ran817
+ naman@stuff.com                 | nam61
+ user1@stuff.com                 | use200
+ ranfis@stuff.com                | ran200
+ Dre@stuff.com                   | Dre200
+ Ibrahim@stuff.com               | Ibr200
+ newuser@network.com             | DefaultUsername
+ test@network.com                | tes845
+ kathlyn.hang.nguyen11@gmail.com | kat149
+ andre07087@gmail.com            | and114
+ ak2426@njit.edu                 | ak2764
+ jhonk7557@gmail.com             | jho962
+ bph6@njit.edu                   | bph730
+ tinderformovies1.0@gmail.com    | tin552
+ aa2748@njit.edu                 | aa2905
+'''
