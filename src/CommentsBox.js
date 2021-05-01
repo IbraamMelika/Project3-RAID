@@ -57,16 +57,17 @@ function CommentsBox({name, userEmail}) {
   //
   
   useEffect(() => {
-    getAllComments("Great Show");
+    getAllComments(name);
     //console.log(commentState);
     //addComment("ibraam2009@gmail.com","Great Show","testing testing")
     }, []);
     
-  //console.log(commentState);
+  console.log(name);
   //var commentStateLength = commentState.length;
   
   function getData(val){
     setBoxInput(val.target.value)
+    
     console.log(val.target.value)
   }
   
@@ -81,14 +82,14 @@ function CommentsBox({name, userEmail}) {
         ))
       }
       
-        <form onSubmit={"blank for now"}>
+        <form>
           <div>
             <input type="text" placeholder="Add a comment" onChange={getData}/>
           </div>
           <div>
               {
                 clicker?
-                addComment("ibraam2009@gmail.com", "Great Show", "I clicked a button")
+                addComment("ibraam2009@gmail.com", name , "hi")
                 :null
               }
               <button onClick={()=>setClicker(true)}>Submit</button>
