@@ -62,6 +62,7 @@ function ProfilePage(prop) {
   
   useEffect(() => {
     getUserInfoByEmail(prop.userEmail);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   function clearDesc() {
