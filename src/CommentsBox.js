@@ -62,7 +62,7 @@ function CommentsBox({name, userEmail}) {
     //addComment("ibraam2009@gmail.com","Great Show","testing testing")
     }, []);
     
-  console.log(name);
+  console.log(boxInput);
   //var commentStateLength = commentState.length;
   
   function getData(val){
@@ -89,7 +89,7 @@ function CommentsBox({name, userEmail}) {
           <div>
               {
                 clicker?
-                addComment("ibraam2009@gmail.com", name , "hi")
+                addComment(userEmail, name, boxInput)
                 :null
               }
               <button onClick={()=>setClicker(true)}>Submit</button>
