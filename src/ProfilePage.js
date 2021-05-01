@@ -25,16 +25,48 @@ function ProfilePage(prop) {
           const split2 = split1[1].split(' ');
           const joinDate = split2[1]+" "+split2[0]+' '+split2[2];
           setJoinDate(joinDate);
+
+          const descriptionData = responseData.description;
+          setDesc(descriptionData);
         });
   }
-
+  
+  function changeDescription(email, description){
+  /* willBeFavorite is a boolean value */
+  
+  email = encodeURIComponent(email);
+  const origDesc = description;
+  description = encodeURIComponent(description);
+  
+  const url = "/api/v1/person";
+  const data = JSON.stringify({'email': email, 'description': description});
+  
+  fetch(url, {
+      method: 'POST',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+         body: data
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData);
+        setDesc(origDesc);
+      });
+}
   function submitClick() {
-    setDesc(inputRef.current.value);
+    const userInput = inputRef.current.value;
+    changeDescription(prop.userEmail, userInput);
   }
   
-      useEffect(() => {
-        getUserInfoByEmail(prop.userEmail);
-    }, []);
+  useEffect(() => {
+    getUserInfoByEmail(prop.userEmail);
+  }, []);
+  
+  function clearDesc() {
+    setDesc(null);
+  }
   
   return (
     <div>
@@ -44,8 +76,8 @@ function ProfilePage(prop) {
             <div class="box" className="desc-div">
               <br></br>
               <h1>{prop.userName}</h1>
-              <p>User since {joinDate}</p><br></br>
-              { descText === "" ? (
+              <h5>User since {joinDate}</h5><br></br>
+              { descText === null ? (
                 <div>
                   <textarea ref={inputRef} name="descText" cols="40" rows="5" placeholder="Enter profile description..."></textarea>
                   <br></br>
@@ -55,6 +87,7 @@ function ProfilePage(prop) {
               : ( 
                 <div>
                   <p>{descText}</p>
+                  <span className="edit-desc" onClick={clearDesc}>Edit Description</span>
                 </div>
               )}
             </div>
