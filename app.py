@@ -67,6 +67,13 @@ def add_person(email, username=None):
     DB.session.add(new_user)
     DB.session.commit()
 
+def change_person_desc(email, description):
+    '''Changes a person's description'''
+
+    query = Person.query.filter_by(email=email).first()
+    query.description = description
+    DB.session.commit()
+
 def get_all_users():
     '''Returns all person from the Database.'''
     all_people = Person.query.all()
@@ -99,6 +106,11 @@ def remove_favorite(email, media):
 def get_all_favorites(email):
     '''Returns all favorites for that person.'''
     all_fav = Favorite.query.filter_by(email=email).all()
+    return all_fav
+
+def get_all_favorites_ordered(email):
+    '''Returns all favorites for that person ordered by name.'''
+    all_fav = Favorite.query.filter_by(email=email).order_by(Favorite.media).all()
     return all_fav
 
 def add_comment(email, media, message):
@@ -172,7 +184,6 @@ def get_all_watchitems_on_watchlist(email, list_name):
     all_items = Watchitem.query.filter_by(email=email, listName=list_name).all()
     return all_items
 
-
 @APP.route('/', defaults={"filename": "index.html"})
 @APP.route('/<path:filename>')
 def index(filename):
@@ -204,7 +215,8 @@ def endpoint_person():
             return {
                 'email' : person.email,
                 'username' : person.username,
-                'joinDate': person.joinDate
+                'joinDate': person.joinDate,
+                'description': person.description
             }
 
     elif request.method == 'POST':
@@ -215,17 +227,23 @@ def endpoint_person():
         print("Got POST from person")
         request_data = request.get_json()
         email = unquote(request_data['email'])
-        print(email)
-
+        description = ""
+        try:
+            description = unquote(request_data['description'])
+        except KeyError:
+            pass
         if is_person(email):
             print("Person already in DB")
             if not is_watchlist(email, "Default List"):
                 add_watchlist(email, "Default List")
-            return {'success': True, 'newUser': False}
+        else:
+            print("Person not in DB")
+            add_person(email)
+            add_watchlist(email, "Default List")
 
-        print("Person not in DB")
-        add_person(email)
-        add_watchlist(email, "Default List")
+        if not description == '':
+            change_person_desc(email, description)
+
         return {'success': True, 'newUser': True}
 
     return Response("Error: Unknown", status=400)
@@ -250,7 +268,7 @@ def endpoint_favorite():
         if media != '':
             return {'isFavorite': is_favorite(email, media)}
 
-        all_favs = get_all_favorites(email)
+        all_favs = get_all_favorites_ordered(email)
         name_list = [fav.media for fav in all_favs]
         return {'allFavorites': name_list}
 

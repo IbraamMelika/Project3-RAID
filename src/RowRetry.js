@@ -20,11 +20,10 @@ function RowRetry({ title, fetchURL, isLargeRow, userEmail }) {
     fetchData();
   }, [fetchURL]);
   
-   function handleClick(name) {
+   function handleClick(movieObj) {
     if (Clicker) {
       setClicker('')
-      setClickedMovie(name)
-      console.log(name)
+      setClickedMovie(movieObj)
     } else {
       setClicker("click")
     }
@@ -41,7 +40,7 @@ function RowRetry({ title, fetchURL, isLargeRow, userEmail }) {
           <img
             key={movie.id}
             //********/
-            onClick={ () => handleClick(movie?.title || movie?.name || movie?.original_name) } // add the onclick for each movie/show
+            onClick={ () => handleClick(movie) } // add the onclick for each movie/show
             //*******/
             className={`row_poster ${isLargeRow && "row_posterLarge"}`} //if its a isLargeRow className is "row_posterLarge"
             src={`${base_url}${isLargeRow ? movie.poster_path : movie.backdrop_path}`} //if it has isLargeRow use movie.backdrop_path else use the other one
@@ -52,7 +51,7 @@ function RowRetry({ title, fetchURL, isLargeRow, userEmail }) {
       </div>
 
       <div className="page_contents">
-        {Clicker && <Page name={clickedMovie} userEmail={userEmail}/>}
+        {Clicker && <Page movieObj={clickedMovie} userEmail={userEmail}/>}
       </div>
     
 

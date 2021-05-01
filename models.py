@@ -17,10 +17,11 @@ def define_person_class(database):
         email = database.Column(database.String(80), primary_key=True)
         username = database.Column(database.String(80), default="DefaultUsername", unique=True)
         joinDate = database.Column(database.DateTime(timezone=True), default=func.now())
+        description = database.Column(database.String(300), default="")
 
         def __repr__(self):
-            return '<Email: {} username: {} joinDate: {}>'.format(
-                self.email, self.username, self.joinDate)
+            return '<Email: {} username: {} joinDate: {} desc: {}>'.format(
+                self.email, self.username, self.joinDate, self.description)
 
     return Person
 
