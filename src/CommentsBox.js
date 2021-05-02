@@ -71,7 +71,7 @@ function CommentsBox({name, userEmail}) {
           
           <div>{
               JSON.stringify(comment["email"]).slice(1,-11) + ": " +
-              JSON.stringify(comment["message"]).slice(1,-1) + " : " +
+              JSON.stringify(comment["message"]).slice(1,-1) + ":  " +
               JSON.stringify(comment["timestamp"]).slice(1,-1)
               }
           </div>
