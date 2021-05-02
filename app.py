@@ -322,6 +322,7 @@ def endpoint_comment():
         email = unquote(request_data['email'])
         media = unquote(request_data['media'])
         message = unquote(request_data['message'])
+        print("Email {} media {} msg {}".format(email, media, message))
 
         add_comment(email, media, message)
         return {'success': True}

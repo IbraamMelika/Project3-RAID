@@ -54,6 +54,16 @@ function CommentsBox({name, userEmail}) {
     getAllComments(name);
     }, [name]);
     
+    
+  useEffect(() => {
+       if(!clicker){
+        return
+       }
+      addComment(userEmail, name, boxInput);
+      getAllComments(name);
+      setClicker(false)
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [clicker]);
   //console.log(boxInput);
   
   function getData(val){
@@ -77,19 +87,14 @@ function CommentsBox({name, userEmail}) {
           </div>
         ))
       }
-        <form>
+        
           <div>
             <input type="text" placeholder="Add a comment" onChange={getData}/>
           </div>
           <div>
-              {
-                clicker?
-                addComment(userEmail, name, boxInput)
-                :null
-              }
               <button onClick={()=>setClicker(true)}>Send</button>
           </div>
-        </form>
+        
       
       </div>
     )
