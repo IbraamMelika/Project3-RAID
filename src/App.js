@@ -7,6 +7,7 @@ import Banner from './Banner'
 import Logout from './Logout';
 import Landing from './Landing';
 import FavoritePage from './FavoritePage';
+import ProfilePage from './ProfilePage';
 import { useState, useRef, useEffect } from 'react';
 
 const API_KEY =`${process.env.REACT_APP_API_KEY}`;
@@ -50,6 +51,31 @@ function getUserInfoByEmail(email){
         const joinDate = responseData.joinDate;
       });
 }
+
+function changeDescription(email, description){
+  /* willBeFavorite is a boolean value */
+  
+  email = encodeURIComponent(email);
+  description = encodeURIComponent(description);
+  
+  const url = "/api/v1/person";
+  const data = JSON.stringify({'email': email, 'description': description});
+  
+  fetch(url, {
+      method: 'POST',
+       headers: {
+          'Content-Type': 'application/json'
+         },
+         body: data
+       })
+     .then(response => {
+        return response.json();
+      }).then(responseData => {
+        console.log(responseData);
+      });
+}
+
+changeDescription("ranfis.francisco@gmail.com", "love movies!!!");
 
 function isFavorite(email, media){
   email = encodeURIComponent(email);
@@ -267,6 +293,7 @@ export function App() {
   const [userImage, setUserImage] = useState('');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [showProfilePage, setShowProfile] = useState(false);
   
   function favoriteClickHandler(){
     setShowAllFavorites(!showAllFavorites);
@@ -293,6 +320,16 @@ export function App() {
     setShown(false);
   }
   
+  function showProfile() {
+    setShowProfile(true);
+  }
+  
+  // Hide all other page components
+  function showOnlyHome() {
+    setShowProfile(false);
+    setShowAllFavorites(false)
+  }
+  
   // Grab google user info from login component and push to database
   const grabUserInfo = (data) => { 
     setUserName(data.name);
@@ -308,33 +345,37 @@ export function App() {
       <div className="App">
           <nav className="grid">
             <ul>
-              <li><img src="movielogosmall.jpg" alt="page logo" className="logo"></img></li>
-              <li><button style={{background : 'none', border:'none', color : 'white'}}>Movie Finder</button></li>
-              <li><button style={{background : 'none', border:'none', color : 'white'}}>Watchlist</button></li>
-              <li><button onClick={favoriteClickHandler} style={{background : 'none', border:'none', color : 'white'}}>Favorites</button></li>
+              <li><img src="movielogosmall.jpg" alt="page logo" className="logo" onClick={showOnlyHome}></img></li>
+              <li><button onClick={showOnlyHome}>Movie Finder</button></li>
+              <li><button>Watchlist</button></li>
+              <li><button onClick={favoriteClickHandler}>Favorites</button></li>
               <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
-              <li><button style={{background : 'none', border:'none', color : 'white'}}>{userName}</button></li>
+              <li><button onClick={showProfile}>{userName}</button></li>
               <li><Logout hidePage={hidePage}/></li>
             </ul>
           </nav>
           { showAllFavorites === true ? (<FavoritePage userEmail={userEmail}/>)
           : null}
-          <div className="search-div">
-            <input type="text" id="searchValue" placeholder="Search Movie..." className="searchbar" onChange={searchChangeHandler}/>
-          </div>
-          <Banner/>
-          { beingSearched === true ? 
-          (<RowRetry title="Search Results" 
-          fetchURL={"/search/multi?api_key="+API_KEY+"&language=en-US&query="+searchTerm+"&page=1&include_adult=false"}
-          isLargeRow userEmail={userEmail}/>)
-          : null}
-          <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} userEmail={userEmail} isLargeRow/>
-          <RowRetry title="Trending Now" fetchURL={requests.fetchTrending} userEmail={userEmail}/>
-          <RowRetry title="Top Rated" fetchURL={requests.fetchTopRated} userEmail={userEmail}/>
-          <RowRetry title="Action Movies" fetchURL={requests.fetchActionMovies} userEmail={userEmail}/>
-          <RowRetry title="Comedy Movies" fetchURL={requests.fetchComedyMovies} userEmail={userEmail}/>
-          <RowRetry title="Horror Movies" fetchURL={requests.fetchHorrorMovies} userEmail={userEmail}/>
-          <RowRetry title="Documentaries" fetchURL={requests.fetchDocumentaries} userEmail={userEmail}/>
+          { showProfilePage === true ? (<ProfilePage userImage={userImage} userName={userName} userEmail={userEmail}/>)
+          : ( 
+            <div>
+              <div className="search-div">
+                <input type="text" id="searchValue" placeholder="Search Movie..." className="searchbar" onChange={searchChangeHandler}/>
+              </div>
+              <Banner/>
+              { beingSearched === true ? 
+              (<RowRetry title="Search Results" 
+              fetchURL={"/search/multi?api_key="+API_KEY+"&language=en-US&query="+searchTerm+"&page=1&include_adult=false"}
+              isLargeRow userEmail={userEmail}/>)
+              : null}
+              <RowRetry title="NETFLIX ORIGINALS" fetchURL={requests.fetchNetlfixOriginals} userEmail={userEmail} isLargeRow/>
+              <RowRetry title="Trending Now" fetchURL={requests.fetchTrending} userEmail={userEmail}/>
+              <RowRetry title="Top Rated" fetchURL={requests.fetchTopRated} userEmail={userEmail}/>
+              <RowRetry title="Action Movies" fetchURL={requests.fetchActionMovies} userEmail={userEmail}/>
+              <RowRetry title="Comedy Movies" fetchURL={requests.fetchComedyMovies} userEmail={userEmail}/>
+              <RowRetry title="Horror Movies" fetchURL={requests.fetchHorrorMovies} userEmail={userEmail}/>
+              <RowRetry title="Documentaries" fetchURL={requests.fetchDocumentaries} userEmail={userEmail}/>
+            </div> )}
       </div>
     ) : (
           <div>
