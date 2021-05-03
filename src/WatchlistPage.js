@@ -3,7 +3,7 @@ import React, {useState, useEffect} from "react";
 
 function WatchlistPage({userEmail}) {
     const [allWatchlists, setAllWatchlists] = useState([]);
-    const [allShow, setallShow] = useState();
+    const [allShow, setallShow] = useState([]);
     
     function getAllWatchlists(email){
       email = encodeURIComponent(email);
@@ -82,7 +82,12 @@ function WatchlistPage({userEmail}) {
             {allWatchlists.map((listName) => (
               <div>
                   <p style={{color : 'white'}}> {listName} </p>
-                  
+                  {allShow.map((listName) => (
+                      <div>
+                          <p style={{color : 'white'}}> {listName} </p>
+                          
+                      </div>
+                    ))}
               </div>
             ))}
             

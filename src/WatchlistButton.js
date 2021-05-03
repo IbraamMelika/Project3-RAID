@@ -122,7 +122,7 @@ function WatchlistButton({userEmail, media}) {
         setListTorF(listTF);
     };
     
-    // console.log("ListTorF: ----------", ListTorF);
+    console.log("ListTorF: ----------", ListTorF);
     const handleAddorRemoveClick = (index) => {
         const listName = index;
         isWatchitemOnWatchlist(userEmail, listName, media);
