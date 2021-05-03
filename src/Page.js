@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import FavoriteButton from "./FavoriteButton.js"
+import WatchlistButton from "./WatchlistButton.js"
 import CommentsBox from "./CommentsBox.js"
 import YouTube from "react-youtube"
 import movieTrailer from "movie-trailer"
@@ -41,6 +42,7 @@ function Page({movieObj, userEmail}) {
             <p>Released {movieObj?.first_air_date || movieObj?.release_date}</p>
             
             <FavoriteButton userEmail={userEmail} media={name}/>
+            <WatchlistButton userEmail={userEmail} media={name}/>
             
             <YouTube videoId={trailerURL} opts={opts}/>
             

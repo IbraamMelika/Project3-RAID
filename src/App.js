@@ -7,6 +7,7 @@ import Banner from './Banner'
 import Logout from './Logout';
 import Landing from './Landing';
 import FavoritePage from './FavoritePage';
+import WatchlistPage from './WatchlistPage';
 import ProfilePage from './ProfilePage';
 import { useState, useRef, useEffect } from 'react';
 
@@ -286,7 +287,8 @@ function isWatchitemOnWatchlist(email, listName, media){
 }
 
 export function App() {
-  const [showAllFavorites, setShowAllFavorites] = useState(false)
+  const [showAllFavorites, setShowAllFavorites] = useState(false);
+  const [showAllwatchLists, setshowAllwatchLists] = useState(false);
   const [searchTerm, setsearchTerm] = useState(" ");
   const [beingSearched, setBeingSearched] = useState(false);
   const [appShown, setShown] = useState(false);
@@ -297,6 +299,10 @@ export function App() {
   
   function favoriteClickHandler(){
     setShowAllFavorites(!showAllFavorites);
+  }
+  
+  function watchListClickHandler(){
+    setshowAllwatchLists(!showAllwatchLists);
   }
   
   function searchChangeHandler(event){
@@ -347,13 +353,15 @@ export function App() {
             <ul>
               <li><img src="movielogosmall.jpg" alt="page logo" className="logo" onClick={showOnlyHome}></img></li>
               <li><button onClick={showOnlyHome}>Movie Finder</button></li>
-              <li><button>Watchlist</button></li>
+              <li><button onClick={watchListClickHandler}>Watchlist</button></li>
               <li><button onClick={favoriteClickHandler}>Favorites</button></li>
               <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
               <li><button onClick={showProfile}>{userName}</button></li>
               <li><Logout hidePage={hidePage}/></li>
             </ul>
           </nav>
+          { showAllwatchLists === true ? (<WatchlistPage userEmail={userEmail}/>)
+          : null}
           { showAllFavorites === true ? (<FavoritePage userEmail={userEmail}/>)
           : null}
           { showProfilePage === true ? (<ProfilePage userImage={userImage} userName={userName} userEmail={userEmail}/>)
