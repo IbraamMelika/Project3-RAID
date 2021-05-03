@@ -1,11 +1,13 @@
 import React, {useState} from "react";
 import FavoriteButton from "./FavoriteButton.js"
 import WatchlistButton from "./WatchlistButton.js"
+import CommentsBox from "./CommentsBox.js"
 import YouTube from "react-youtube"
 import movieTrailer from "movie-trailer"
 
 function Page({movieObj, userEmail}) {
     const [trailerURL, setTrailerURL] = useState("");
+
 
     const name = movieObj?.title || movieObj?.name || movieObj?.original_name;
 
@@ -43,7 +45,12 @@ function Page({movieObj, userEmail}) {
             <WatchlistButton userEmail={userEmail} media={name}/>
             
             <YouTube videoId={trailerURL} opts={opts}/>
+            
+            <div className="comments_section">
+                <CommentsBox name={name} userEmail={userEmail}/>
+            </div>
         </div>
+        
     )
 }
 

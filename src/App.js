@@ -138,7 +138,7 @@ function getAllFavorites(email){
       });
 }
 
-function getAllComments(media){
+export function getAllComments(media){
   media = encodeURIComponent(media);
   const url = "/api/v1/comment?media=" + media;
   
@@ -157,7 +157,7 @@ function getAllComments(media){
       });
 }
 
-function addComment(email, media, message){
+export function addComment(email, media, message){
   email = encodeURIComponent(email);
   media = encodeURIComponent(media);
   message = encodeURIComponent(message);
