@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import FavoritePage from './FavoritePage';
+import WatchlistPage from './WatchlistPage';
 
 function ProfilePage(prop) {
   const [joinDate, setJoinDate] = useState("");
@@ -101,6 +102,8 @@ function ProfilePage(prop) {
             </div>
             <div class="box" className="list-div">
               <h1><u>Your Watchlist</u></h1>
+              <br></br>
+              <WatchlistPage userEmail={prop.userEmail}/>
             </div>
             <div></div>
         </div>

@@ -65,7 +65,7 @@ function WatchlistPage({userEmail}) {
             <h2 style={{color : 'white'}}>Your WatchList's:</h2>
             {allWatchlists.map((listName) => (
               <div>
-                    <p style={{color : 'white'}}> {listName} </p>
+                    <h3 style={{color : 'white'}}> {listName} </h3>
                     {allShow.map((showName) => (
                       <div>
                           <li style={{color : 'white'}}> {showName} </li>
