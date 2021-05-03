@@ -45,18 +45,21 @@ function WatchlistPage({userEmail}) {
          .then(response => {
             return response.json();
           }).then(responseData => {
-            // can loop through list and get .media, .dateAdded for each
+            // can loop through list and get .listName, .media, .dateAdded for each
             const watchItems = responseData.watchItems;
             // console.log(watchItems);
             var list = [];
             for (var i = 0; i < watchItems.length; i++) {
-              list.push(watchItems[i]['media']);
+              list.push(watchItems[i]['listName']);
             }
             setallShow(list);
             console.log('watchItems---------', list);
           });
     }
-    useEffect(() => {getAllWatchlists(userEmail)}, []);
+    useEffect(() => {
+        getAllWatchlists(userEmail);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     //TODO: PUT WATCHLIST BELOW FAVORITE
     return (
         <div>
@@ -64,11 +67,12 @@ function WatchlistPage({userEmail}) {
             {allWatchlists.map((listName) => (
               <div>
                     <p style={{color : 'white'}}> {listName} </p>
-                    {allShow.map((showName) => (
-                      <div>
-                          <li style={{color : 'white'}}> {showName} </li>
-                      </div>
-                    ))}
+                    
+              </div>
+            ))}
+            {allShow.map((showName) => (
+              <div>
+                  <li style={{color : 'white'}}> {showName} </li>
               </div>
             ))}
         </div>
