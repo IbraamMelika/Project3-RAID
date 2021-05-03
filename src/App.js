@@ -353,7 +353,7 @@ export function App() {
             <ul>
               <li><img src="movielogosmall.jpg" alt="page logo" className="logo" onClick={showOnlyHome}></img></li>
               <li><button onClick={showOnlyHome}>Movie Finder</button></li>
-              <li><button onClick={watchListClickHandler} style={{background : 'none', border:'none', color : 'white'}}>Watchlist</button></li>
+              <li><button onClick={watchListClickHandler}>Watchlist</button></li>
               <li><button onClick={favoriteClickHandler}>Favorites</button></li>
               <li><img src={userImage} alt="google profile pic" className="google-profile-pic"></img></li>
               <li><button onClick={showProfile}>{userName}</button></li>
