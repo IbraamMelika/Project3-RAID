@@ -90,7 +90,7 @@ function WatchlistPage({userEmail}) {
     //TODO: PUT WATCHLIST BELOW FAVORITE
     return (
         <div>
-            <h2 style={{color : 'white'}}>Your WatchList's:</h2>
+            <h2 style={{color : 'white'}}>Your WatchLists:</h2>
             {allWatchlists.map((listName) => (
               <div>
                     <h3 style={{color : 'white'}}> {listName} </h3>
