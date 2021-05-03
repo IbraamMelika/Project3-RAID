@@ -8,7 +8,7 @@ function WatchlistPage({userEmail}) {
     function getAllWatchlists(email){
       email = encodeURIComponent(email);
       const url = "/api/v1/watchlist?email=" + email;
-      
+
       fetch(url, {
           method: 'GET',
            headers: {
@@ -34,7 +34,7 @@ function WatchlistPage({userEmail}) {
       email = encodeURIComponent(email);
       listName = encodeURIComponent(listName);
       const url = "/api/v1/watchitem?email=" + email + "&listName=" + listName;
-      
+
       fetch(url, {
           method: 'GET',
           headers: {
@@ -55,6 +55,34 @@ function WatchlistPage({userEmail}) {
             console.log('watchItems---------', list);
           });
     }
+    function addOrRemoveWatchitemFromWatchlist(email, listName, media, addOrRemove){
+      /* addOrRemove is a boolean value True for add False for remove*/
+
+      email = encodeURIComponent(email);
+      listName = encodeURIComponent(listName);
+      media = encodeURIComponent(media);
+
+      const url = "/api/v1/watchitem";
+      const data = JSON.stringify({'email': email, 'media': media, 'listName': listName, 'addOrRemove': addOrRemove});
+
+      fetch(url, {
+          method: 'POST',
+           headers: {
+              'Content-Type': 'application/json'
+             },
+             body: data
+           })
+         .then(response => {
+            return response.json();
+          }).then(responseData => {
+            // console.log(responseData);
+          });
+    }
+    const handledeleteList = (index, index2) => {
+        const listName = index;
+        const media = index2;
+        addOrRemoveWatchitemFromWatchlist(userEmail, listName, media, false);
+    };
     useEffect(() => {
         getAllWatchlists(userEmail);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,6 +97,9 @@ function WatchlistPage({userEmail}) {
                     {allShow.map((showName) => (
                       <div>
                           <li style={{color : 'white'}}> {showName} </li>
+                          <button onClick={ () => handledeleteList(listName, showName) }>
+                            <img src="trash-sign-red-icon.jpg" width="20" height="24" alt='Trash'></img>
+                          </button><br></br>
                       </div>
                     ))}
               </div>
@@ -78,17 +109,3 @@ function WatchlistPage({userEmail}) {
 }
 
 export default WatchlistPage;
-// 81 <FavoriteButton userEmail={userEmail} media={listName}/>
-
-// {allWatchlists.map((listName) => (
-//           <div>
-//               <p style={{color : 'white'}}> {listName} </p>
-              
-//           </div>
-//         ))}
-
-                //   {allShow.map((showName) => (
-                //       <div>
-                //           <li style={{color : 'white'}}> {showName} </li>
-                //       </div>
-                //     ))}
