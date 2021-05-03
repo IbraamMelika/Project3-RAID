@@ -19,7 +19,6 @@ function WatchlistPage({userEmail}) {
             return response.json();
           }).then(responseData => {
             const watchLists = responseData.watchLists.watchlists;
-                // setgetAllWatchlistsstate(watchLists);
                 var i;
                 var list = [];
                 for (i = 0; i < watchLists.length; i++) {
@@ -50,7 +49,7 @@ function WatchlistPage({userEmail}) {
             // console.log(watchItems);
             var list = [];
             for (var i = 0; i < watchItems.length; i++) {
-              list.push(watchItems[i]['listName']);
+              list.push(watchItems[i]['media']);
             }
             setallShow(list);
             console.log('watchItems---------', list);
@@ -67,12 +66,11 @@ function WatchlistPage({userEmail}) {
             {allWatchlists.map((listName) => (
               <div>
                     <p style={{color : 'white'}}> {listName} </p>
-                    
-              </div>
-            ))}
-            {allShow.map((showName) => (
-              <div>
-                  <li style={{color : 'white'}}> {showName} </li>
+                    {allShow.map((showName) => (
+                      <div>
+                          <li style={{color : 'white'}}> {showName} </li>
+                      </div>
+                    ))}
               </div>
             ))}
         </div>

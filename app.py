@@ -393,7 +393,8 @@ def endpoint_watchitem():
 
         items = get_all_watchitems_on_watchlist(email, list_name)
         return_item = {"watchItems" : \
-        [{'listName': item.listName, 'media': item.media, 'dateAdded': item.dateAdded} for item in items]}
+        [{'listName': item.listName, 'media': item.media, 'dateAdded': item.dateAdded}\
+        for item in items]}
 
         return return_item
 
