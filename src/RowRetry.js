@@ -51,7 +51,7 @@ function RowRetry({ title, fetchURL, isLargeRow, userEmail }) {
       </div>
 
       <div className="page_contents">
-        {Clicker && <Page movieObj={clickedMovie} userEmail={userEmail}/>}
+        {Clicker && <Page movieObj={clickedMovie} userEmail={userEmail} movieID={movie.id}/>}
       </div>
     
 
