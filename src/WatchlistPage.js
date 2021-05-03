@@ -34,12 +34,12 @@ function WatchlistPage({userEmail}) {
       listName = encodeURIComponent(listName);
       const url = "/api/v1/watchitem?email=" + email + "&listName=" + listName;
       
-       fetch(url, {
+      fetch(url, {
           method: 'GET',
-           headers: {
+          headers: {
               'Content-Type': 'application/json'
              },
-           })
+          })
          .then(response => {
             return response.json();
           }).then(responseData => {
@@ -71,7 +71,7 @@ function WatchlistPage({userEmail}) {
     //This makes sure getAllFavorites is only run once each time the component is loaded
     useEffect(() => {
         getAllWatchlists(userEmail);
-        // getAllWatchitemsOnWatchlist(userEmail, 'MyMovieList');
+        getAllWatchitemsOnWatchlist(userEmail, 'Default List');
     });
     
     // getdata();
