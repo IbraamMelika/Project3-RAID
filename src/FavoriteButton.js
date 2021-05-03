@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 function FavoriteButton({userEmail, media}) {
     const [isFavoriteState, setFavoriteState] = useState(false);
@@ -27,6 +27,10 @@ function FavoriteButton({userEmail, media}) {
     
     function changeFavorite(email, media, willBeFavorite){
       /* willBeFavorite is a boolean value */
+      if (media === ""){
+          console.log("EMPTY NAME!!!")
+          return;
+      }
       
       email = encodeURIComponent(email);
       media = encodeURIComponent(media);
@@ -48,8 +52,12 @@ function FavoriteButton({userEmail, media}) {
           });
     }
 
-    console.log("Fetching isFavorite");
-    isFavorite(userEmail, media);
+    useEffect(() => {
+        console.log("Fetching isFavorite");
+        isFavorite(userEmail, media);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    
 
     // add a state called isFavoriteState to keep track of whether or not this media  is favorited or not
     // Call the fucntion isFavorite. Inside the function, add a line to save the server result to isFavoriteState

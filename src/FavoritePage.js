@@ -22,10 +22,12 @@ function FavoritePage({userEmail}) {
           });
 }
 
-    //This makes sure getAllFavorites is only run once each time the component is loaded
+    
     useEffect(() => {
         getAllFavorites(userEmail);
-    });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     
     //TODO: PUT WATCHLIST BELOW FAVORITE
     return (
